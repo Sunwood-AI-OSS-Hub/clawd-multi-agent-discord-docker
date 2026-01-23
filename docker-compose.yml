@@ -7,7 +7,7 @@ services:
       HOME: /home/node
       TERM: xterm-256color
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT1_GATEWAY_TOKEN}
-      GLM_API_KEY: ${GLM_API_KEY}
+      ZAI_API_KEY: ${ZAI_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
     volumes:
       - ./config/bot1:/home/node/.clawdbot
@@ -28,7 +28,7 @@ services:
       HOME: /home/node
       TERM: xterm-256color
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT2_GATEWAY_TOKEN}
-      GLM_API_KEY: ${GLM_API_KEY}
+      ZAI_API_KEY: ${ZAI_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
     volumes:
       - ./config/bot2:/home/node/.clawdbot
@@ -49,7 +49,7 @@ services:
       HOME: /home/node
       TERM: xterm-256color
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT3_GATEWAY_TOKEN}
-      GLM_API_KEY: ${GLM_API_KEY}
+      ZAI_API_KEY: ${ZAI_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
     volumes:
       - ./config/bot3:/home/node/.clawdbot
@@ -70,7 +70,7 @@ services:
       HOME: /home/node
       TERM: xterm-256color
       BROWSER: echo
-      GLM_API_KEY: ${GLM_API_KEY}
+      ZAI_API_KEY: ${ZAI_API_KEY}
     volumes:
       - ./config/bot1:/home/node/.clawdbot
       - ./workspace/bot1:/home/node/clawd

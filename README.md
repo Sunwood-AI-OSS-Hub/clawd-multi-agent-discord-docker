@@ -1,20 +1,53 @@
+<div align="center">
+
+![header](assets/header.svg)
+
 # clawd-multi-agent-discord-docker
 
-Clawdbot を使用した **3つの独立した Discord ボット** を Docker Compose で運用するためのセットアップです。GLM-4.7 モデルを使用します。
+[![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
+[![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
+[![Discord](https://img.shields.io/badge/Discord-API%20v10-5865F2.svg)](https://discord.com/developers/docs)
+[![GLM-4.7](https://img.shields.io/badge/AI-GLM--4.7-FF6B6B.svg)](https://open.bigmodel.cn/)
+[![Clawdbot](https://img.shields.io/badge/Bot-Clawdbot-7C3AED.svg)](https://docs.clawd.bot)
 
-## 概要
+**3つの独立したAI Discordボット**をDocker Composeで運用するための完全セットアップ
 
-このプロジェクトでは、1つの GLM-4.7 API キーを共有しつつ、3つの独立した Discord ボットを立ち上げます。各ボットは独自のゲートウェイプロセスとコンテナで動作します。
+1つのGLM-4.7 APIキーを共有しつつ、各ボットは独立したゲートウェイプロセスで動作します。
 
-### ボット構成
+</div>
 
-| ボット名 | Discord ID | ポート | 説明 |
-|---------|-----------|--------|------|
-| CL1-Kuroha | 1463974919137399000 | 18789 | Bot 1 |
-| CL2-Reika  | 1463976407582511195 | 18791 | Bot 2 |
-| CL3-Sentinel | 1463977421656162344 | 18793 | Bot 3 |
+---
 
-## アーキテクチャ
+## Table of Contents
+
+- [Overview](#overview)
+- [Architecture](#architecture)
+- [Bot Configuration](#bot-configuration)
+- [Prerequisites](#prerequisites)
+- [Quick Start](#quick-start)
+- [Configuration](#configuration)
+- [Commands](#commands)
+- [Troubleshooting](#troubleshooting)
+- [References](#references)
+- [License](#license)
+
+---
+
+## Overview
+
+このプロジェクトでは、**Clawdbot**を使用して3つの独立したDiscordボットをDocker Composeで運用します。各ボットは独自のゲートウェイプロセスとコンテナで動作し、GLM-4.7 AIモデルを共有します。
+
+### Features
+
+- **3 Independent Bots**: 各ボットが独立したプロセスで動作
+- **Shared AI Model**: GLM-4.7 APIキーを共有
+- **Docker Compose**: ワンコマンドで起動・管理
+- **Isolated Workspaces**: 各ボット専用のワークスペース
+- **Easy Configuration**: JSONベースの設定管理
+
+---
+
+## Architecture
 
 ```
 ┌─────────────────────────────────────────────────────────────┐
@@ -45,102 +78,85 @@ Clawdbot を使用した **3つの独立した Discord ボット** を Docker Co
                    └───────────────┘
 ```
 
-## 前提条件
+---
 
-- Docker と Docker Compose v2 がインストールされていること
-- [Zhipu AI GLM-4.7](https://open.bigmodel.cn/) の API キーを持っていること
-- 3つの Discord ボットトークンを持っていること
+## Bot Configuration
 
-## セットアップ手順
+| ボット名 | ポート | 説明 |
+|---------|--------|------|
+| CL1-Kuroha | 18789 | Bot 1 - Main Agent |
+| CL2-Reika  | 18791 | Bot 2 - Support Agent |
+| CL3-Sentinel | 18793 | Bot 3 - Monitor Agent |
 
-### 1. Discord ボットの作成
+---
 
-[Discord Developer Portal](https://discord.com/developers/applications) で3つのアプリケーションを作成し、それぞれのトークンを取得します。
+## Prerequisites
 
-**必須権限:**
+- [Docker](https://docs.docker.com/get-docker/) と [Docker Compose v2](https://docs.docker.com/compose/install/)
+- [Zhipu AI GLM-4.7](https://open.bigmodel.cn/) API Key
+- 3つの [Discord Bot Tokens](https://discord.com/developers/applications)
+
+### Discord Bot Required Intents
+
 - Message Content Intent
 - Server Members Intent
 - Presence Intent
 
-### 2. リポジトリのクローンとビルド
+---
+
+## Quick Start
+
+### 1. Clone Repository
 
 ```bash
-# Clawdbot リポジトリをクローン
-git clone https://github.com/clawdbot/clawdbot.git
-cd clawdbot
-
-# Docker イメージをビルド
-docker build -t clawdbot:local .
-```
-
-### 3. プロジェクトのセットアップ
-
-```bash
-# プロジェクトディレクトリを作成
-mkdir clawd-multi-agent-discord-docker
+git clone https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
 cd clawd-multi-agent-discord-docker
-
-# 設定ファイルを作成（以下のセクションを参照）
 ```
 
-### 4. 環境変数の設定
-
-`.env` ファイルを作成:
+### 2. Build Docker Image
 
 ```bash
-# Gateway トークン生成 (32文字のランダムなhex)
-# それぞれ別の値を生成してください
-openssl rand -hex 32  # Bot 1 用
-openssl rand -hex 32  # Bot 2 用
-openssl rand -hex 32  #Bot 3 用
+docker build -t clawdbot:local ./clawdbot
 ```
 
-`.env` ファイル:
+### 3. Configure Environment
+
+Copy `.env.example` to `.env` and fill in your credentials:
 
 ```bash
-# =============================================================================
-# Clawdbot - 3 Independent Bots
-# =============================================================================
+cp .env.example .env
+```
 
-# Gateway tokens (run: openssl rand -hex 32)
-CLAWDBOT_BOT1_GATEWAY_TOKEN=生成したトークン1
-CLAWDBOT_BOT2_GATEWAY_TOKEN=生成したトークン2
-CLAWDBOT_BOT3_GATEWAY_TOKEN=生成したトークン3
+Generate gateway tokens (3 separate tokens):
 
-# GLM 4.7 API Key (共通)
-GLM_API_KEY=あなたのGLM_APIキー
+```bash
+openssl rand -hex 32  # Bot 1
+openssl rand -hex 32  # Bot 2
+openssl rand -hex 32  # Bot 3
+```
+
+Edit `.env`:
+
+```bash
+# Gateway tokens (3 unique values)
+CLAWDBOT_BOT1_GATEWAY_TOKEN=your_token_1
+CLAWDBOT_BOT2_GATEWAY_TOKEN=your_token_2
+CLAWDBOT_BOT3_GATEWAY_TOKEN=your_token_3
+
+# GLM 4.7 API Key (shared)
+GLM_API_KEY=your_glm_api_key
 
 # Discord Bot Tokens (3 separate accounts)
-DISCORD_BOT1_TOKEN=あなたのDiscord_Bot1トークン
-DISCORD_BOT2_TOKEN=あなたのDiscord_Bot2トークン
-DISCORD_BOT3_TOKEN=あなたのDiscord_Bot3トークン
+DISCORD_BOT1_TOKEN=your_discord_token_1
+DISCORD_BOT2_TOKEN=your_discord_token_2
+DISCORD_BOT3_TOKEN=your_discord_token_3
 ```
 
-### 5. 設定ファイルの作成
+### 4. Configure Bots
 
-各ボットの設定ディレクトリ構造:
+Each bot requires configuration files in `config/bot*/`:
 
-```
-./
-├── docker-compose.yml
-├── .env
-├── config/
-│   ├── bot1/
-│   │   ├── clawdbot.json
-│   │   └── models.json
-│   ├── bot2/
-│   │   ├── clawdbot.json
-│   │   └── models.json
-│   └── bot3/
-│       ├── clawdbot.json
-│       └── models.json
-└── workspace/
-    ├── bot1/
-    ├── bot2/
-    └── bot3/
-```
-
-#### `config/bot*/models.json`:
+#### `models.json` (same for all bots)
 
 ```json
 {
@@ -148,7 +164,7 @@ DISCORD_BOT3_TOKEN=あなたのDiscord_Bot3トークン
   "providers": {
     "glm": {
       "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
-      "apiKey": "あなたのGLM_APIキー",
+      "apiKey": "your_glm_api_key",
       "api": "openai-completions",
       "models": [
         {
@@ -161,7 +177,7 @@ DISCORD_BOT3_TOKEN=あなたのDiscord_Bot3トークン
 }
 ```
 
-#### `config/bot*/clawdbot.json`:
+#### `clawdbot.json` (same for all bots)
 
 ```json
 {
@@ -187,241 +203,182 @@ DISCORD_BOT3_TOKEN=あなたのDiscord_Bot3トークン
 }
 ```
 
-### 6. Docker Compose の作成
-
-`docker-compose.yml`:
-
-```yaml
-services:
-  # Bot 1 - Gateway
-  clawdbot-bot1:
-    image: clawdbot:local
-    container_name: clawdbot-bot1
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT1_GATEWAY_TOKEN}
-      GLM_API_KEY: ${GLM_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
-    volumes:
-      - ./config/bot1:/home/node/.clawdbot
-      - ./workspace/bot1:/home/node/clawd
-    ports:
-      - "18789:18789"
-    init: true
-    restart: unless-stopped
-    command: ["node", "dist/index.js", "gateway"]
-    networks:
-      - clawdbot-network
-
-  # Bot 2 - Gateway
-  clawdbot-bot2:
-    image: clawdbot:local
-    container_name: clawdbot-bot2
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT2_GATEWAY_TOKEN}
-      GLM_API_KEY: ${GLM_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
-    volumes:
-      - ./config/bot2:/home/node/.clawdbot
-      - ./workspace/bot2:/home/node/clawd
-    ports:
-      - "18791:18789"
-    init: true
-    restart: unless-stopped
-    command: ["node", "dist/index.js", "gateway"]
-    networks:
-      - clawdbot-network
-
-  # Bot 3 - Gateway
-  clawdbot-bot3:
-    image: clawdbot:local
-    container_name: clawdbot-bot3
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT3_GATEWAY_TOKEN}
-      GLM_API_KEY: ${GLM_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
-    volumes:
-      - ./config/bot3:/home/node/.clawdbot
-      - ./workspace/bot3:/home/node/clawd
-    ports:
-      - "18793:18789"
-    init: true
-    restart: unless-stopped
-    command: ["node", "dist/index.js", "gateway"]
-    networks:
-      - clawdbot-network
-
-  # CLI for setup
-  clawdbot-cli:
-    image: clawdbot:local
-    container_name: clawdbot-cli
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      BROWSER: echo
-      GLM_API_KEY: ${GLM_API_KEY}
-    volumes:
-      - ./config/bot1:/home/node/.clawdbot
-      - ./workspace/bot1:/home/node/clawd
-    stdin_open: true
-    tty: true
-    init: true
-    entrypoint: ["node", "dist/index.js"]
-    profiles:
-      - cli
-    networks:
-      - clawdbot-network
-
-networks:
-  clawdbot-network:
-    driver: bridge
-```
-
-### 7. Discord チャンネルの追加
-
-初回起動前に、各ボットで Discord チャンネルを追加する必要があります:
+### 5. Start Bots
 
 ```bash
-# Bot 1
-docker compose --profile cli run --rm clawdbot-cli \
-    channels add --channel discord --token "${DISCORD_BOT1_TOKEN}"
-
-# bot2 用に config を切り替えてから、Bot 2 用のコマンドを実行
-# (CLI コンテナの volumes を変更して再実行)
-```
-
-または、CLI コンテナの volumes を一時的に変更して各ボットに設定します。
-
-### 8. ボットの起動
-
-```bash
-# すべてのボットを起動
+# Start all bots
 docker compose up -d
 
-# ステータス確認
+# Check status
 docker compose ps
 
-# ログ確認
+# View logs
 docker compose logs -f
 ```
 
-## 設定項目の解説
+---
 
-### clawdbot.json
+## Configuration
 
-| 項目 | 値 | 説明 |
-|------|-----|------|
-| `agents.defaults.model.primary` | `glm/glm-4.7` | 使用するモデル |
-| `channels.discord.enabled` | `true` | Discord を有効化 |
-| `channels.discord.groupPolicy` | `open` | すべてのチャンネルで応答 |
-| `messages.ackReactionScope` | `all` | すべてのメッセージにリアクション |
+### Directory Structure
 
-- **groupPolicy**:
-  - `open`: すべてのチャンネルで応答
-  - `allowlist`: 許可されたチャンネルのみで応答
+```
+./
+├── docker-compose.yml
+├── .env
+├── .env.example
+├── README.md
+├── setup.sh
+├── assets/
+│   └── header.svg
+├── clawdbot/          # Clawdbot source
+├── config/
+│   ├── bot1/
+│   │   ├── clawdbot.json
+│   │   ├── models.json
+│   │   └── cron/
+│   │       └── jobs.json
+│   ├── bot2/
+│   │   ├── clawdbot.json
+│   │   ├── models.json
+│   │   └── cron/
+│   │       └── jobs.json
+│   ├── bot3/
+│   │   ├── clawdbot.json
+│   │   ├── models.json
+│   │   └── cron/
+│   │       └── jobs.json
+│   └── clawdbot.json  # Global config
+└── workspace/
+    ├── bot1/
+    ├── bot2/
+    └── bot3/
+```
 
-- **ackReactionScope**:
-  - `all`: すべてのメッセージにリアクション
-  - `group-mentions`: メンションのみにリアクション
+### Configuration Options
 
-### models.json
+#### clawdbot.json
 
-| 項目 | 値 | 説明 |
-|------|-----|------|
-| `mode` | `append` | 既存プロバイダーに追加 |
-| `providers.glm.baseUrl` | GLM API endpoint | Zhipu AI の API URL |
-| `providers.glm.api` | `openai-completions` | OpenAI 互換モード |
+| Option | Value | Description |
+|--------|-------|-------------|
+| `agents.defaults.model.primary` | `glm/glm-4.7` | Primary AI model |
+| `channels.discord.enabled` | `true` | Enable Discord |
+| `channels.discord.groupPolicy` | `open` | Response policy (`open`/`allowlist`) |
+| `messages.ackReactionScope` | `all` | Reaction scope (`all`/`group-mentions`) |
 
-## コマンド
+**groupPolicy:**
+- `open`: Respond in all channels
+- `allowlist`: Respond only in allowed channels
 
-### ボットの操作
+**ackReactionScope:**
+- `all`: React to all messages
+- `group-mentions`: React only to mentions
+
+#### models.json
+
+| Option | Value | Description |
+|--------|-------|-------------|
+| `mode` | `append` | Append to existing providers |
+| `providers.glm.baseUrl` | GLM API endpoint | Zhipu AI API URL |
+| `providers.glm.api` | `openai-completions` | OpenAI compatibility mode |
+
+---
+
+## Commands
+
+### Bot Operations
 
 ```bash
-# 起動
+# Start all bots
 docker compose up -d
 
-# 停止
+# Stop all bots
 docker compose down
 
-# 再起動
+# Restart all bots
 docker compose restart
 
-# 特定のボットのみ再起動
+# Restart specific bot
 docker compose restart clawdbot-bot1
 
-# ログを確認
+# View logs for specific bot
 docker compose logs -f clawdbot-bot1
 
-# すべてのログを確認
+# View all logs
 docker compose logs -f
 ```
 
-### ボットの設定変更
+### CLI Access
 
 ```bash
-# CLI で設定変更
+# Access CLI for bot1
 docker compose --profile cli run --rm clawdbot-cli
 
-# コンテナ内でコマンド実行
-docker exec -it clawdbot-bot1 node dist/index.js config set ...
+# Add Discord channel via CLI
+docker compose --profile cli run --rm clawdbot-cli \
+    channels add --channel discord --token "${DISCORD_BOT1_TOKEN}"
 ```
 
-## トラブルシューティング
+### Container Access
 
-### 「Unknown model: glm/glm-4.7」エラー
+```bash
+# Execute command in container
+docker exec -it clawdbot-bot1 node dist/index.js config set ...
 
-**原因:** `models.json` が正しく設定されていない、または API キーが正しくない
+# Interactive shell
+docker exec -it clawdbot-bot1 /bin/bash
+```
 
-**解決策:**
-1. `models.json` で `apiKey` が正しく設定されているか確認
-2. API キーが有効か確認
-3. GLM API にアクセスできるか確認
+---
 
-### ボットがオフライン表示
+## Troubleshooting
 
-**原因:** Discord トークンが間違っている、または権限が不足している
+### "Unknown model: glm/glm-4.7" Error
 
-**解決策:**
-1. Discord トークンが `.env` に正しく設定されているか確認
-2. Message Content Intent が有効になっているか確認
-3. ボットがサーバーに招待されているか確認
+**Cause:** `models.json` not configured correctly or invalid API key
 
-### 「gateway already running」エラー
+**Solutions:**
+1. Verify `apiKey` in `models.json`
+2. Check GLM API key is valid
+3. Test GLM API access
 
-**原因:** 古いプロセスが残っている
+### Bot Shows as Offline
 
-**解決策:**
+**Cause:** Invalid Discord token or missing intents
+
+**Solutions:**
+1. Verify Discord token in `.env`
+2. Enable **Message Content Intent** in Discord Developer Portal
+3. Ensure bot is invited to server
+
+### "gateway already running" Error
+
+**Cause:** Old process still running
+
+**Solution:**
 ```bash
 docker compose down
 docker compose up -d
 ```
 
-### ポート競合エラー
+### Port Conflicts
 
-**原因:** ポート 18789, 18791, 18793 が使用中
+**Cause:** Ports 18789, 18791, 18793 already in use
 
-**解決策:**
+**Solution:**
 ```bash
-# 使用中のプロセスを確認
+# Find process using port
 sudo lsof -i :18789
-sudo lsof -i :18791
-sudo lsof -i :18793
 
-# プロセスを終了
+# Kill process
 sudo kill -9 <PID>
 ```
 
-### リアクションがつかない
+### Reactions Not Working
 
-**原因:** `ackReactionScope` の設定
+**Cause:** `ackReactionScope` configuration
 
-**解決策:**
-`config/bot*/clawdbot.json` で以下を確認:
+**Solution:** Check `config/bot*/clawdbot.json`:
 ```json
 {
   "messages": {
@@ -430,14 +387,27 @@ sudo kill -9 <PID>
 }
 ```
 
-## 参考リンク
+---
 
-- [Clawdbot ドキュメント](https://docs.clawd.bot)
+## References
+
+- [Clawdbot Documentation](https://docs.clawd.bot)
 - [Clawdbot GitHub](https://github.com/clawdbot/clawdbot)
 - [Zhipu AI GLM API](https://open.bigmodel.cn/)
 - [Discord Developer Portal](https://discord.com/developers/applications)
+- [Docker Documentation](https://docs.docker.com/)
 
-## ライセンス
+---
 
-このプロジェクトは Clawdbot のセットアップ例です。
-Clawdbot のライセンスに従ってください。
+## License
+
+This project is a setup example for Clawdbot.
+Please refer to the [Clawdbot License](https://github.com/clawdbot/clawdbot/blob/main/LICENSE) for details.
+
+---
+
+<div align="center">
+
+Made with ❤️ by [Sunwood AI OSS Hub](https://github.com/Sunwood-AI-OSS-Hub)
+
+</div>

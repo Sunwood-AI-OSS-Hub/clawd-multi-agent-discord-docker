@@ -2,7 +2,7 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "glm/glm-4.7"
+        "primary": "zai/glm-4.7"
       },
       "maxConcurrent": 4,
       "subagents": {

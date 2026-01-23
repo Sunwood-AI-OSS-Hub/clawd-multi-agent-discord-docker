@@ -1,0 +1,24 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 200">
+  <defs>
+    <linearGradient id="gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#7C3AED;stop-opacity:1" />
+      <stop offset="50%" style="stop-color:#5865F2;stop-opacity:1" />
+      <stop offset="100%" style="stop-color:#3B82F6;stop-opacity:1" />
+    </linearGradient>
+    <style>
+      @import url('https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@700&amp;display=swap');
+      .title { font-family: 'JetBrains Mono', monospace; font-size: 56px; font-weight: 700; fill: white; }
+      .subtitle { font-family: 'JetBrains Mono', monospace; font-size: 24px; fill: rgba(255,255,255,0.8); }
+      .icon { fill: rgba(255,255,255,0.2); }
+    </style>
+  </defs>
+  <rect width="100%" height="100%" fill="url(#gradient)" rx="16"/>
+  <!-- Bot icon pattern -->
+  <g transform="translate(50, 50)">
+    <circle cx="40" cy="40" r="35" class="icon"/>
+    <circle cx="120" cy="60" r="25" class="icon"/>
+    <circle cx="200" cy="40" r="30" class="icon"/>
+  </g>
+  <text x="400" y="90" class="title">clawd-multi-agent-discord-docker</text>
+  <text x="400" y="140" class="subtitle">3 Independent AI Discord Bots with Docker Compose</text>
+</svg>
