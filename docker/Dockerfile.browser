@@ -1,0 +1,11 @@
+# Base image from the main Clawdbot build
+FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
+
+# Install agent-browser globally
+RUN npm install -g agent-browser
+
+# Set working directory
+WORKDIR /app
+
+# Keep the same entrypoint as base image
+CMD ["node", "dist/index.js"]

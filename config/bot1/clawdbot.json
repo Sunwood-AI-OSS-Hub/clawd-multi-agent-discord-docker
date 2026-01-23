@@ -1,6 +1,7 @@
 {
   "agents": {
     "defaults": {
+      "workspace": "/home/node/clawd",
       "model": {
         "primary": "zai/glm-4.7"
       },
