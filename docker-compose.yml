@@ -15,6 +15,7 @@ services:
     volumes:
       - ./config/bot1:/home/node/.clawdbot
       - ./workspace/bot1:/home/node/clawd
+      - ./workspace/bot1/skills:/app/skills:ro
     ports:
       - "18789:18789"
     init: true
