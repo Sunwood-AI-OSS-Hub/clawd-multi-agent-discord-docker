@@ -8,9 +8,9 @@ FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
 # Install agent-browser globally
 RUN npm install -g agent-browser
 
-# Install sudo and GitHub CLI
+# Install sudo, GitHub CLI, and git
 RUN apt-get update && \
-    apt-get install -y --no-install-recommends sudo curl && \
+    apt-get install -y --no-install-recommends sudo curl git && \
     curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg && \
     chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg && \
     echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" > /etc/apt/sources.list.d/github-cli.list && \
@@ -28,6 +28,17 @@ RUN useradd -m -s /bin/bash agent && \
 RUN mkdir -p /app/skills/agent-browser && \
     curl -o /app/skills/agent-browser/SKILL.md \
       https://raw.githubusercontent.com/vercel-labs/agent-browser/main/skills/agent-browser/SKILL.md && \
+    chown -R agent:agent /app/skills
+
+# Install remotion skill (using git clone)
+RUN mkdir -p /app/skills && \
+    cd /tmp && \
+    git clone --depth 1 --filter=blob:none --sparse https://github.com/remotion-dev/remotion.git && \
+    cd remotion && \
+    git sparse-checkout set packages/skills/skills/remotion && \
+    cp -r packages/skills/skills/remotion /app/skills/ && \
+    cd / && \
+    rm -rf /tmp/remotion && \
     chown -R agent:agent /app/skills
 
 # Set working directory
