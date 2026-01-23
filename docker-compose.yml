@@ -1,7 +1,10 @@
 services:
   # Bot 1 - Gateway
   clawdbot-bot1:
-    image: clawdbot:local
+    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
+    build:
+      context: ./clawdbot
+      dockerfile: Dockerfile
     container_name: clawdbot-bot1
     environment:
       HOME: /home/node
@@ -16,13 +19,16 @@ services:
       - "18789:18789"
     init: true
     restart: unless-stopped
-    command: ["node", "dist/index.js", "gateway"]
+    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
     networks:
       - clawdbot-network
 
   # Bot 2 - Gateway
   clawdbot-bot2:
-    image: clawdbot:local
+    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
+    build:
+      context: ./clawdbot
+      dockerfile: Dockerfile
     container_name: clawdbot-bot2
     environment:
       HOME: /home/node
@@ -37,13 +43,16 @@ services:
       - "18791:18789"
     init: true
     restart: unless-stopped
-    command: ["node", "dist/index.js", "gateway"]
+    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
     networks:
       - clawdbot-network
 
   # Bot 3 - Gateway
   clawdbot-bot3:
-    image: clawdbot:local
+    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
+    build:
+      context: ./clawdbot
+      dockerfile: Dockerfile
     container_name: clawdbot-bot3
     environment:
       HOME: /home/node
@@ -58,13 +67,16 @@ services:
       - "18793:18789"
     init: true
     restart: unless-stopped
-    command: ["node", "dist/index.js", "gateway"]
+    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
     networks:
       - clawdbot-network
 
   # CLI for setup
   clawdbot-cli:
-    image: clawdbot:local
+    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
+    build:
+      context: ./clawdbot
+      dockerfile: Dockerfile
     container_name: clawdbot-cli
     environment:
       HOME: /home/node
