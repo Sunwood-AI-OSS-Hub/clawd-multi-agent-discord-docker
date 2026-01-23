@@ -1,14 +1,18 @@
 <div align="center">
 
-![header](assets/header.svg)
+![header](assets/header.png)
 
-# clawd-multi-agent-discord-docker
+# Clawd Agent3 
+
+## ～clawd-multi-agent-discord-docker～
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
 [![Discord](https://img.shields.io/badge/Discord-API%20v10-5865F2.svg)](https://discord.com/developers/docs)
 [![GLM-4.7](https://img.shields.io/badge/AI-GLM--4.7-FF6B6B.svg)](https://open.bigmodel.cn/)
 [![Clawdbot](https://img.shields.io/badge/Bot-Clawdbot-7C3AED.svg)](https://docs.clawd.bot)
+
+[English](README.en.md) | **日本語**
 
 **3つの独立したAI Discordボット**をDocker Composeで運用するための完全セットアップ
 
