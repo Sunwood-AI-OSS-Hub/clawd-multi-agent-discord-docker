@@ -68,3 +68,4 @@ yarn-error.log*
 *.pid
 *.seed
 *.pid.lock
+RELEASE_NOTES.md
