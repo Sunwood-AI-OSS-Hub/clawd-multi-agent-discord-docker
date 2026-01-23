@@ -39,7 +39,9 @@ jobs:
         id: meta
         uses: docker/metadata-action@v5
         with:
-          images: ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+          images: |
+            ${{ env.REGISTRY }}/${{ env.IMAGE_NAME }}
+            ${{ env.REGISTRY }}/sunwood-ai-oss-hub/agentos-clawd-agent3
           tags: |
             type=ref,event=branch
             type=semver,pattern={{version}}
