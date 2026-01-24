@@ -69,3 +69,11 @@ yarn-error.log*
 *.seed
 *.pid.lock
 RELEASE_NOTES.md
+config/bot1/cron/jobs.json
+
+# Local bot configurations
+config/bot1/
+config/bot2/
+config/bot3/cron/
+config/bot3/devices/
+config/bot3/identity/

@@ -8,6 +8,9 @@ FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
 # Install agent-browser globally
 RUN npm install -g agent-browser
 
+# Install Playwright dependencies for Chromium
+RUN npx playwright install --with-deps chromium
+
 # Install sudo, GitHub CLI, and git
 RUN apt-get update && \
     apt-get install -y --no-install-recommends sudo curl git && \
@@ -20,15 +23,22 @@ RUN apt-get update && \
     rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*
 
 # Create a non-root user with passwordless sudo access
+# Also add to node group so we can access /home/node/clawd
 RUN useradd -m -s /bin/bash agent && \
     echo "agent ALL=(ALL) NOPASSWD:ALL" > /etc/sudoers.d/agent && \
-    chmod 440 /etc/sudoers.d/agent
+    chmod 440 /etc/sudoers.d/agent && \
+    usermod -aG node agent
+
+# Ensure /home/node directory exists and is writable by node group
+RUN mkdir -p /home/node && \
+    chown -R node:node /home/node && \
+    chmod -R 775 /home/node
 
 # Install agent-browser skill
 RUN mkdir -p /app/skills/agent-browser && \
     curl -o /app/skills/agent-browser/SKILL.md \
       https://raw.githubusercontent.com/vercel-labs/agent-browser/main/skills/agent-browser/SKILL.md && \
-    chown -R agent:agent /app/skills
+    chown -R node:node /app/skills
 
 # Install remotion skill (using git clone)
 RUN mkdir -p /app/skills && \
@@ -39,7 +49,7 @@ RUN mkdir -p /app/skills && \
     cp -r packages/skills/skills/remotion /app/skills/ && \
     cd / && \
     rm -rf /tmp/remotion && \
-    chown -R agent:agent /app/skills
+    chown -R node:node /app/skills
 
 # Set working directory
 WORKDIR /app
