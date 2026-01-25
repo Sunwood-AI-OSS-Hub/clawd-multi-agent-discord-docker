@@ -5,11 +5,14 @@
 # Base image from the main Clawdbot build
 FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
 
+# Install Playwright globally first
+RUN npm install -g playwright
+
+# Install Playwright Chromium and system dependencies
+RUN npx playwright install --with-deps chromium
+
 # Install agent-browser globally
 RUN npm install -g agent-browser
-
-# Install Playwright dependencies for Chromium
-RUN npx playwright install --with-deps chromium
 
 # Install sudo, GitHub CLI, and git
 RUN apt-get update && \
@@ -51,11 +54,17 @@ RUN mkdir -p /app/skills && \
     rm -rf /tmp/remotion && \
     chown -R node:node /app/skills
 
+# Install Claude Code CLI (cc-st, cc-glm, ccd-st, ccd-glm)
+RUN curl -fsSL https://raw.githubusercontent.com/Sunwood-ai-labs/zero-cc/main/script/install.sh | bash
+
 # Set working directory
 WORKDIR /app
 
 # Switch to the agent user
 USER agent
+
+# Install Claude Code CLI for agent user
+RUN curl -fsSL https://raw.githubusercontent.com/Sunwood-ai-labs/zero-cc/main/script/install.sh | bash
 
 # Keep the same entrypoint as base image (will run as agent user)
 CMD ["node", "dist/index.js"]
