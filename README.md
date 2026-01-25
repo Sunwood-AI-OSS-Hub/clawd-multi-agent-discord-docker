@@ -209,6 +209,8 @@ DISCORD_BOT3_TOKEN=あなたのDiscordトークン3
 
 ### 5. ボットを起動
 
+#### Standard版
+
 ```bash
 # 全てのボットを起動
 docker compose up -d
@@ -218,6 +220,19 @@ docker compose ps
 
 # ログ表示
 docker compose logs -f
+```
+
+#### Infinity版
+
+```bash
+# Infinity版でビルド＆起動
+docker compose -f docker-compose.infinity.yml up --build
+
+# バックグラウンドで起動
+docker compose -f docker-compose.infinity.yml up -d --build
+
+# ログ表示
+docker compose -f docker-compose.infinity.yml logs -f
 ```
 
 ---
