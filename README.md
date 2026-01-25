@@ -113,7 +113,7 @@
 ### 1. リポジトリをクローン
 
 ```bash
-git clone https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
+git clone --recursive https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
 cd clawd-multi-agent-discord-docker
 ```
 

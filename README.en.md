@@ -111,7 +111,7 @@ This project runs **3 independent Discord bots** using **Clawdbot** with Docker 
 ### 1. Clone Repository
 
 ```bash
-git clone https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
+git clone --recursive https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
 cd clawd-multi-agent-discord-docker
 ```
 
