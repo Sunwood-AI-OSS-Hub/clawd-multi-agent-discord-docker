@@ -12,6 +12,7 @@ config/**/sessions/
 config/**/*.lock
 config/**/*.bak
 config/**/update-check.json
+config/**/*llm-secrets.sh
 
 # workspace（別のGitリポジトリ）
 workspace/
