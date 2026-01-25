@@ -4,6 +4,9 @@ FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
 # Install agent-browser globally
 RUN npm install -g agent-browser
 
+# Install Playwright dependencies for Chromium
+RUN npx playwright install --with-deps chromium
+
 # Set working directory
 WORKDIR /app
 

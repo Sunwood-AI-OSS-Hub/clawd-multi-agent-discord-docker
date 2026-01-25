@@ -29,6 +29,7 @@ services:
     volumes:
       - ./config/bot1:/home/agent/.clawdbot
       - ./workspace/bot1:/home/agent/clawd
+      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot1/skills:/app/skills
     ports:
       - "18789:18789"
@@ -55,6 +56,7 @@ services:
     volumes:
       - ./config/bot2:/home/agent/.clawdbot
       - ./workspace/bot2:/home/agent/clawd
+      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot2/skills:/app/skills
     ports:
       - "18791:18789"
@@ -81,6 +83,7 @@ services:
     volumes:
       - ./config/bot3:/home/agent/.clawdbot
       - ./workspace/bot3:/home/agent/clawd
+      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot3/skills:/app/skills
     ports:
       - "18793:18789"
@@ -106,6 +109,7 @@ services:
     volumes:
       - ./config/bot1:/home/agent/.clawdbot
       - ./workspace/bot1:/home/agent/clawd
+      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot1/skills:/app/skills
     stdin_open: true
     tty: true
