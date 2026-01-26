@@ -2,7 +2,7 @@
   "agents": {
     "defaults": {
       "model": {
-        "primary": "zai/glm-4.7"
+        "primary": "openrouter/qwen/qwen3-coder:free"
       }
     }
   },

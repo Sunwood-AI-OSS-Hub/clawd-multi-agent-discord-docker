@@ -1,0 +1,54 @@
+
+```
+mkdir -p /data
+cat > /data/clawdbot.json << 'EOF'
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/qwen/qwen3-coder:free",
+        "fallbacks": ["openrouter/qwen/qwen3-coder:free", "openrouter/qwen/qwen3-coder:free"]
+      },
+      "maxConcurrent": 4
+    },
+    "list": [
+      {
+        "id": "main",
+        "default": true
+      }
+    ]
+  },
+  "auth": {
+    "profiles": {
+      "anthropic:default": { "mode": "token", "provider": "anthropic" },
+      "openai:default": { "mode": "token", "provider": "openai" }
+    }
+  },
+  "bindings": [
+    {
+      "agentId": "main",
+      "match": { "channel": "discord" }
+    }
+  ],
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "groupPolicy": "allowlist",
+      "guilds": {
+        "YOUR_GUILD_ID": {
+          "channels": { "general": { "allow": true } },
+          "requireMention": false
+        }
+      }
+    }
+  },
+  "gateway": {
+    "mode": "local",
+    "bind": "auto"
+  },
+  "meta": {
+    "lastTouchedVersion": "2026.1.24"
+  }
+}
+EOF
+```

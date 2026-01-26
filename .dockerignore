@@ -1,0 +1,59 @@
+# Git
+.git
+.worktrees
+
+# Local bot configurations (not needed for Fly.io build)
+config/
+
+# Environment files
+.env
+.env.local
+.env.*.local
+.env.fly
+
+# Dependencies
+node_modules
+**/node_modules
+.pnpm-store
+
+# Build artifacts
+dist
+**/dist
+
+# Cache
+.cache
+**/.cache
+.turbo
+**/.turbo
+
+# Logs
+*.log
+
+# Temporary files
+.tmp
+**/.tmp
+tmp
+**/tmp
+
+# OS files
+.DS_Store
+**/.DS_Store
+
+# bun cache
+.bun-cache
+.bun
+
+# Media files (not needed for build)
+*.png
+*.jpg
+*.jpeg
+*.webp
+*.gif
+*.mp4
+*.mov
+*.wav
+*.mp3
+
+# IDE
+.vscode
+.idea
