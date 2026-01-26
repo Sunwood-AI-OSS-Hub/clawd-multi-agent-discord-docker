@@ -5,7 +5,7 @@ app = "clawdbot-aquarium"
 primary_region = "nrt"
 
 [build]
-  dockerfile = "clawdbot/Dockerfile"
+  dockerfile = "Dockerfile"
 
 [env]
   NODE_ENV = "production"
