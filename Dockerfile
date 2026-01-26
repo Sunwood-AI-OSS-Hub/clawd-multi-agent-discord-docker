@@ -21,6 +21,9 @@ COPY clawdbot/ui/package.json ./ui/package.json
 COPY clawdbot/patches ./patches
 COPY clawdbot/scripts ./scripts
 
+# Use HTTPS for git protocol to avoid local .git dependency
+RUN echo "git-protocol=https" >> .npmrc
+
 RUN pnpm install --frozen-lockfile
 
 COPY clawdbot/. .
