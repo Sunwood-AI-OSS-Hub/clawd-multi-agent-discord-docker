@@ -9,7 +9,8 @@ set -e
 #   デプロイ:
 #     1. .env.fly.example を .env.fly にコピー
 #     2. .env.fly に環境変数を設定
-#     3. ./scripts/fly-deploy-clawdbot.sh
+#     3. config/flyio/clawdbot.json を必要に応じて編集
+#     4. ./scripts/fly-deploy-clawdbot.sh
 #
 #   IP制限付きデプロイ:
 #     ./scripts/fly-deploy-clawdbot.sh --proxy-ips "203.0.113.1,198.51.100.0/24"
@@ -21,6 +22,8 @@ set -e
 #
 # .env.fly に FLY_ALLOWED_IPS を設定すると、指定したIPからのアクセスのみ許可します
 # 例: FLY_ALLOWED_IPS="203.0.113.1,198.51.100.0/24"
+#
+# 設定ファイル (config/flyio/clawdbot.json) はデプロイ時に自動で /data/.clawdbot/clawdbot.json にコピーされます
 # ----------------------------------------
 
 # スクリプトディレクトリからプロジェクトルートへ移動
@@ -395,6 +398,43 @@ set_secrets() {
 }
 
 # ========================================
+# 設定ファイルコピー
+# ========================================
+
+setup_config_file() {
+    local local_config="config/flyio/clawdbot.json"
+    local remote_config="/data/clawdbot.json"
+
+    if [ ! -f "$local_config" ]; then
+        warn "設定ファイル ${local_config} が見つかりません"
+        info "SSHで手動設定するか、Control UIから設定してください"
+        return 0
+    fi
+
+    info "設定ファイルをコピー中..."
+
+    # ファイルコピー
+    cat "$local_config" | fly ssh console -C "tee ${remote_config} > /dev/null" -a "${APP_NAME}" >/dev/null 2>&1
+
+    if [ $? -eq 0 ]; then
+        success "設定ファイルコピー完了: ${remote_config}"
+
+        # 確認表示
+        echo ""
+        info "コピーした設定ファイル:"
+        fly ssh console -C "cat ${remote_config}" -a "${APP_NAME}" 2>/dev/null || warn "  設定ファイルの確認に失敗しました"
+        echo ""
+
+        # Gatewayを再起動して設定を適用
+        info "Gatewayを再起動して設定を適用します..."
+        fly machines restart -a "${APP_NAME}" >/dev/null 2>&1 || warn "  再起動に失敗しました（手動で再起動してください）"
+        success "再起動完了"
+    else
+        error "設定ファイルのコピーに失敗しました"
+    fi
+}
+
+# ========================================
 # IP制限設定
 # ========================================
 
@@ -548,6 +588,10 @@ show_completion() {
     echo -e "  ${YELLOW}fly proxy ips add <IP> -a ${APP_NAME}${NC} # IPを追加"
     echo -e "  ${YELLOW}fly proxy ips remove <IP> -a ${APP_NAME}${NC} # IPを削除"
     echo ""
+    echo -e "設定ファイル:"
+    echo -e "  ${YELLOW}fly ssh console -C \"cat /data/clawdbot.json\" -a ${APP_NAME}${NC}"
+    echo -e "  ${YELLOW}fly ssh console -C \"tee /data/clawdbot.json\" -a ${APP_NAME} < config.json${NC}"
+    echo ""
 
     if confirm "ログを確認しますか？"; then
         fly logs -a "${APP_NAME}"
@@ -604,6 +648,7 @@ main() {
     create_fly_resources
     set_secrets
     deploy
+    setup_config_file
     setup_proxy_ips
     show_completion
 }

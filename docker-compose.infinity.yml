@@ -22,6 +22,7 @@ services:
     environment:
       HOME: /home/agent
       TERM: xterm-256color
+      PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT1_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
@@ -29,13 +30,13 @@ services:
     volumes:
       - ./config/bot1:/home/agent/.clawdbot
       - ./workspace/bot1:/home/agent/clawd
-      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot1/skills:/app/skills
     ports:
       - "18789:18789"
+      - "3001:3000"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway"]
+    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway --bind lan"]
     networks:
       - infinity-network
 
@@ -49,6 +50,7 @@ services:
     environment:
       HOME: /home/agent
       TERM: xterm-256color
+      PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT2_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
@@ -56,13 +58,12 @@ services:
     volumes:
       - ./config/bot2:/home/agent/.clawdbot
       - ./workspace/bot2:/home/agent/clawd
-      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot2/skills:/app/skills
     ports:
       - "18791:18789"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway"]
+    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway --bind lan"]
     networks:
       - infinity-network
 
@@ -76,6 +77,7 @@ services:
     environment:
       HOME: /home/agent
       TERM: xterm-256color
+      PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
       CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT3_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
@@ -83,13 +85,12 @@ services:
     volumes:
       - ./config/bot3:/home/agent/.clawdbot
       - ./workspace/bot3:/home/agent/clawd
-      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot3/skills:/app/skills
     ports:
       - "18793:18789"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway"]
+    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway --bind lan"]
     networks:
       - infinity-network
 
@@ -109,7 +110,6 @@ services:
     volumes:
       - ./config/bot1:/home/agent/.clawdbot
       - ./workspace/bot1:/home/agent/clawd
-      - ./config/00-llm-secrets.sh:/home/agent/.bashrc.d/00-llm-secrets.sh:ro
       # - ./workspace/bot1/skills:/app/skills
     stdin_open: true
     tty: true

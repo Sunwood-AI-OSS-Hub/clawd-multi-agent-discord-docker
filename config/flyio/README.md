@@ -7,7 +7,10 @@ cat > /data/clawdbot.json << 'EOF'
     "defaults": {
       "model": {
         "primary": "openrouter/qwen/qwen3-coder:free",
-        "fallbacks": ["openrouter/qwen/qwen3-coder:free", "openrouter/qwen/qwen3-coder:free"]
+        "fallbacks": [
+          "openrouter/meta-llama/llama-3.1-8b-instruct:free",
+          "openrouter/google/gemma-2-9b-it:free"
+        ]
       },
       "maxConcurrent": 4
     },
@@ -21,7 +24,9 @@ cat > /data/clawdbot.json << 'EOF'
   "auth": {
     "profiles": {
       "anthropic:default": { "mode": "token", "provider": "anthropic" },
-      "openai:default": { "mode": "token", "provider": "openai" }
+      "openai:default": { "mode": "token", "provider": "openai" },
+      "openrouter:default": { "mode": "token", "provider": "openrouter" },
+      "zai:default": { "mode": "token", "provider": "zai" }
     }
   },
   "bindings": [
