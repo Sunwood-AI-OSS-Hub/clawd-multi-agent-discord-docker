@@ -11,10 +11,16 @@ set -e
 #     2. .env.fly に環境変数を設定
 #     3. ./scripts/fly-deploy-clawdbot.sh
 #
+#   IP制限付きデプロイ:
+#     ./scripts/fly-deploy-clawdbot.sh --proxy-ips "203.0.113.1,198.51.100.0/24"
+#
 #   削除:
 #     ./scripts/fly-deploy-clawdbot.sh --delete [APP_NAME]
 #
 # .env.fly がない場合は対話的に設定を求めます
+#
+# .env.fly に FLY_ALLOWED_IPS を設定すると、指定したIPからのアクセスのみ許可します
+# 例: FLY_ALLOWED_IPS="203.0.113.1,198.51.100.0/24"
 # ----------------------------------------
 
 # スクリプトディレクトリからプロジェクトルートへ移動
@@ -231,6 +237,27 @@ collect_config() {
         DISCORD_BOT_TOKEN="${DISCORD_BOT_TOKEN:-}"
     fi
 
+    # IP制限設定（.env.fly にない場合のみ）
+    if ! $has_env || [ -z "${FLY_ALLOWED_IPS}" ]; then
+        echo ""
+        info "=== IPアクセス制限設定 ==="
+        echo ""
+        info "特定のIPからのみアクセスを許可できます（オプション）"
+        echo "  例: 203.0.113.1 または 198.51.100.0/24"
+        echo "  複数指定: 203.0.113.1,198.51.100.0/24"
+        echo "  空欄ですべてのIPを許可（公開）"
+        echo ""
+
+        if confirm "IPアクセス制限を設定しますか？"; then
+            prompt ALLOWED_IPS "許可するIPアドレス（カンマ区切り）" ""
+            FLY_ALLOWED_IPS="${ALLOWED_IPS}"
+        else
+            FLY_ALLOWED_IPS=""
+        fi
+    else
+        FLY_ALLOWED_IPS="${FLY_ALLOWED_IPS:-}"
+    fi
+
     # 確認
     echo ""
     info "=== 設定確認 ==="
@@ -242,6 +269,11 @@ collect_config() {
     echo "  ZAI:         ${ZAI_API_KEY:+設定済み}${ZAI_API_KEY:-未設定}"
     echo "  OpenRouter:  ${OPENROUTER_API_KEY:+設定済み}${OPENROUTER_API_KEY:-未設定}"
     echo "  Discord:     ${DISCORD_BOT_TOKEN:+設定済み}${DISCORD_BOT_TOKEN:-未設定}"
+    if [ -n "${FLY_ALLOWED_IPS}" ]; then
+        echo -e "  IP制限:      ${YELLOW}有効${NC} (${FLY_ALLOWED_IPS})"
+    else
+        echo "  IP制限:      なし（公開）"
+    fi
     echo ""
 
     if ! confirm "この設定でデプロイを続けますか？"; then
@@ -363,6 +395,38 @@ set_secrets() {
 }
 
 # ========================================
+# IP制限設定
+# ========================================
+
+setup_proxy_ips() {
+    if [ -z "${FLY_ALLOWED_IPS}" ]; then
+        info "IP制限なし（公開アクセス）"
+        return 0
+    fi
+
+    info "Forward Proxy IP制限を設定中..."
+
+    # カンマ区切りのIPを配列に変換して処理
+    IFS=',' read -ra IPS <<< "${FLY_ALLOWED_IPS}"
+    for ip in "${IPS[@]}"; do
+        # スペースを削除
+        ip=$(echo "$ip" | xargs)
+        if [ -n "$ip" ]; then
+            info "  IPを追加: ${ip}"
+            fly proxy ips add "${ip}" -a "${APP_NAME}" 2>/dev/null || {
+                warn "    このIPは既に登録されているか、追加に失敗しました"
+            }
+        fi
+    done
+
+    echo ""
+    info "登録済みのIPアドレス:"
+    fly proxy ips list -a "${APP_NAME}" 2>/dev/null || warn "  IPリストの取得に失敗しました"
+    echo ""
+    success "IP制限設定完了"
+}
+
+# ========================================
 # デプロイ
 # ========================================
 
@@ -467,11 +531,22 @@ show_completion() {
     echo -e "アプリ URL:    ${CYAN}https://${APP_NAME}.fly.dev/${NC}"
     echo -e "Control UI:    ${CYAN}https://${APP_NAME}.fly.dev/${NC}"
     echo ""
+
+    # IP制限が設定されている場合は警告を表示
+    if [ -n "${FLY_ALLOWED_IPS}" ]; then
+        echo -e "${YELLOW}⚠️  IPアクセス制限が有効です${NC}"
+        echo -e "  許可IP: ${CYAN}${FLY_ALLOWED_IPS}${NC}"
+        echo ""
+    fi
+
     echo -e "便利なコマンド:"
-    echo -e "  ${YELLOW}fly logs -a ${APP_NAME}${NC}        # ログ確認"
-    echo -e "  ${YELLOW}fly status -a ${APP_NAME}${NC}      # ステータス確認"
-    echo -e "  ${YELLOW}fly ssh console -a ${APP_NAME}${NC} # SSH 接続"
-    echo -e "  ${YELLOW}fly open -a ${APP_NAME}${NC}        # ブラウザで開く"
+    echo -e "  ${YELLOW}fly logs -a ${APP_NAME}${NC}              # ログ確認"
+    echo -e "  ${YELLOW}fly status -a ${APP_NAME}${NC}            # ステータス確認"
+    echo -e "  ${YELLOW}fly ssh console -a ${APP_NAME}${NC}       # SSH 接続"
+    echo -e "  ${YELLOW}fly open -a ${APP_NAME}${NC}              # ブラウザで開く"
+    echo -e "  ${YELLOW}fly proxy ips list -a ${APP_NAME}${NC}    # IP制限リスト確認"
+    echo -e "  ${YELLOW}fly proxy ips add <IP> -a ${APP_NAME}${NC} # IPを追加"
+    echo -e "  ${YELLOW}fly proxy ips remove <IP> -a ${APP_NAME}${NC} # IPを削除"
     echo ""
 
     if confirm "ログを確認しますか？"; then
@@ -490,14 +565,29 @@ main() {
         exit 0
     fi
 
+    # IP制限オプション
+    if [ "$1" = "--proxy-ips" ] && [ -n "$2" ]; then
+        FLY_ALLOWED_IPS="$2"
+        info "IP制限を設定: ${FLY_ALLOWED_IPS}"
+        shift 2
+    fi
+
     # ヘルプ表示
     if [ "$1" = "--help" ] || [ "$1" = "-h" ]; then
         echo "Clawdbot Fly.io デプロイスクリプト"
         echo ""
         echo "使い方:"
-        echo "  $0                    # デプロイ"
-        echo "  $0 --delete [APP]     # アプリ削除"
-        echo "  $0 -h, --help         # ヘルプ"
+        echo "  $0                                   # デプロイ"
+        echo "  $0 --proxy-ips \"IP1,IP2\"            # IP制限付きデプロイ"
+        echo "  $0 --delete [APP]                    # アプリ削除"
+        echo "  $0 -h, --help                        # ヘルプ"
+        echo ""
+        echo "IP制限の例:"
+        echo "  $0 --proxy-ips \"203.0.113.1\""
+        echo "  $0 --proxy-ips \"203.0.113.1,198.51.100.0/24\""
+        echo ""
+        echo ".env.fly に FLY_ALLOWED_IPS を設定してもOK:"
+        echo "  FLY_ALLOWED_IPS=\"203.0.113.1,198.51.100.0/24\""
         echo ""
         exit 0
     fi
@@ -514,6 +604,7 @@ main() {
     create_fly_resources
     set_secrets
     deploy
+    setup_proxy_ips
     show_completion
 }
 
