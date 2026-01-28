@@ -1,0 +1,104 @@
+name: CLAUDE_CODE_GLM_DEV
+
+on:
+  issue_comment:
+    types: [created]
+  issues:
+    types: [opened, assigned]
+  pull_request_review_comment:
+    types: [created]
+  pull_request:
+    types: [opened]
+
+# 同じIssue/PRでは同時に走らないようにする
+concurrency:
+  group: ${{ github.workflow }}-${{ github.event.issue.number || github.event.pull_request.number }}
+  cancel-in-progress: false
+
+jobs:
+  claude:
+    if: |
+      (github.event_name == 'issue_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'pull_request_review_comment' && contains(github.event.comment.body, '@claude')) ||
+      (github.event_name == 'issues' && contains(github.event.issue.body, '@claude')) ||
+      github.event_name == 'pull_request'
+    runs-on: ubuntu-latest
+
+    # デフォルト設定（必要に応じてオーバーライド可能）
+    env:
+      CREATE_AUTO_PR: "true"              # Issueからのトリガー時に自動でPRを作成するかどうか
+      INCLUDE_TASK_SUMMARY: "true"        # タスクサマリー（---より後ろの報告内容）を含めるかどうか
+      SCRIPT_SOURCE: "remote"             # スクリプトのソース: local または remote
+      SCRIPT_URL: "https://raw.githubusercontent.com/Sunwood-AI-OSS-Hub/claude-glm-actions-lab-sandbox/refs/heads/main/.github/scripts/create-pr.py"
+
+    permissions:
+      contents: write
+      pull-requests: write
+      issues: write
+      id-token: write
+
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          ref: main
+
+      # ★ここで「この実行が使うブランチ名」を決め打ちする
+      - name: Compute branch name
+        id: branch
+        shell: bash
+        run: |
+          if [[ "${{ github.event_name }}" == "pull_request_review_comment" ]] || [[ "${{ github.event_name }}" == "pull_request" ]]; then
+            echo "name=claude-glm-dev-pr-${{ github.event.pull_request.number }}" >> "$GITHUB_OUTPUT"
+          else
+            echo "name=claude-glm-dev-issue-${{ github.event.issue.number }}" >> "$GITHUB_OUTPUT"
+          fi
+
+      - uses: anthropics/claude-code-action@v1
+        with:
+          trigger_phrase: "@claude"
+
+          # ★ブランチ名を固定（タイムスタンプなし）
+          branch_prefix: ""
+          branch_name_template: ${{ steps.branch.outputs.name }}
+
+          # ★追加：バリデーション通過用に必要
+          anthropic_api_key: ${{ secrets.ZAI_API_KEY }}
+
+        env:
+          # GLMに向ける設定
+          ANTHROPIC_BASE_URL: https://api.z.ai/api/anthropic
+          ANTHROPIC_AUTH_TOKEN: ${{ secrets.ZAI_API_KEY }}
+          API_TIMEOUT_MS: "3000000"
+          ANTHROPIC_DEFAULT_OPUS_MODEL: "glm-4.7"
+          ANTHROPIC_DEFAULT_SONNET_MODEL: "glm-4.7"
+          ANTHROPIC_DEFAULT_HAIKU_MODEL: "glm-4.5-air"
+
+      # ★Issueからトリガーされた場合のみ、自動でPRを作成
+      - name: Create PR (if from issue)
+        if: github.event_name == 'issues'
+        env:
+          GH_TOKEN: ${{ secrets.GH_PAT_ONIZUKA }}
+        run: |
+          # 環境変数でPR作成を制御
+          if [[ "${{ env.CREATE_AUTO_PR }}" != "true" ]]; then
+            echo "CREATE_AUTO_PR is not true. Skipping PR creation."
+            exit 0
+          fi
+
+          # スクリプトの実行（ローカル/リモート切り替え）
+          if [[ "${{ env.SCRIPT_SOURCE }}" == "remote" ]]; then
+            if [[ -z "${{ env.SCRIPT_URL }}" ]]; then
+              echo "ERROR: SCRIPT_SOURCE=remote but SCRIPT_URL is not set!"
+              exit 1
+            fi
+            echo "Downloading script from remote..."
+            curl -fsSL "${{ env.SCRIPT_URL }}" -o /tmp/create-pr.py
+            python3 /tmp/create-pr.py \
+              "${{ steps.branch.outputs.name }}" \
+              "${{ github.event.issue.number }}"
+          else
+            echo "Using local script..."
+            python3 .github/scripts/create-pr.py \
+              "${{ steps.branch.outputs.name }}" \
+              "${{ github.event.issue.number }}"
+          fi
