@@ -2,14 +2,16 @@
 
 ![header](assets/header.png)
 
-# clawd-multi-agent-discord-docker
+# OpenClaw Agent3
+
+## ～openclaw-multi-agent-discord-docker～
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
 [![Discord](https://img.shields.io/badge/Discord-API%20v10-5865F2.svg)](https://discord.com/developers/docs)
 [![GLM-4.7](https://img.shields.io/badge/AI-GLM--4.7-FF6B6B.svg)](https://open.bigmodel.cn/)
-[![OpenRouter](https://img.shields.io/badge/AI-OpenRouter-8B5CF6.svg)](https://openrouter.ai/)
-[![Clawdbot](https://img.shields.io/badge/Bot-Clawdbot-7C3AED.svg)](https://docs.clawd.bot)
+[![OpenRouter](https://img.shields.io/badge/AI-OpenRouter-878787.svg)](https://openrouter.ai/)
+[![OpenClaw](https://img.shields.io/badge/Bot-OpenClaw-7C3AED.svg)](https://openclaw.ai)
 
 <a href="README.md"><img src="https://img.shields.io/badge/%E6%96%87%E6%9B%B8-%E6%97%A5%E6%9C%AC%E8%AA%9E-white.svg" alt="JA doc"/></a>
 
@@ -38,7 +40,7 @@ Each bot runs with its own independent gateway process while sharing GLM-4.7 / O
 
 ## Overview
 
-This project runs **3 independent Discord bots** using **Clawdbot** with Docker Compose. Each bot operates with its own gateway process and container, sharing the GLM-4.7 AI model.
+This project runs **3 independent Discord bots** using **OpenClaw** with Docker Compose. Each bot operates with its own gateway process and container, sharing the GLM-4.7 AI model.
 
 ### Features
 
@@ -372,7 +374,7 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   └── header.png
 ├── docker/
 │   └── Dockerfile.infinity         # Infinity version Dockerfile
-├── clawdbot/                       # Clawdbot source
+├── clawdbot/                       # OpenClaw source
 ├── config/
 │   ├── bot1/
 │   │   ├── clawdbot.json
@@ -570,8 +572,8 @@ sudo kill -9 <PID>
 
 ## References
 
-- [Clawdbot Documentation](https://docs.clawd.bot)
-- [Clawdbot GitHub](https://github.com/clawdbot/clawdbot)
+- [OpenClaw Documentation](https://docs.openclaw.ai)
+- [OpenClaw GitHub](https://github.com/openclaw/openclaw)
 - [Zhipu AI GLM API](https://open.bigmodel.cn/)
 - [OpenRouter Documentation](https://openrouter.ai/docs)
 - [Discord Developer Portal](https://discord.com/developers/applications)
@@ -581,8 +583,8 @@ sudo kill -9 <PID>
 
 ## License
 
-This project is a setup example for Clawdbot.
-Please refer to the [Clawdbot License](https://github.com/clawdbot/clawdbot/blob/main/LICENSE) for details.
+This project is a setup example for OpenClaw.
+Please refer to the [OpenClaw License](https://github.com/openclaw/openclaw/blob/main/LICENSE) for details.
 
 ---
 

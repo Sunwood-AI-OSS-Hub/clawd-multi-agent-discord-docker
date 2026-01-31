@@ -2,16 +2,16 @@
 
 ![header](assets/header.png)
 
-# Clawd Agent3
+# OpenClaw Agent3
 
-## ～clawd-multi-agent-discord-docker～
+## ～openclaw-multi-agent-discord-docker～
 
 [![License: MIT](https://img.shields.io/badge/License-MIT-purple.svg)](https://opensource.org/licenses/MIT)
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
 [![Discord](https://img-shields.io/badge/Discord-API%20v10-5865F2.svg)](https://discord.com/developers/docs)
 [![GLM-4.7](https://img.shields.io/badge/AI-GLM--4.7-FF6B6B.svg)](https://open.bigmodel.cn/)
 [![OpenRouter](https://img.shields.io/badge/AI-OpenRouter-878787.svg)](https://openrouter.ai/)
-[![Clawdbot](https://img.shields.io/badge/Bot-Clawdbot-7C3AED.svg)](https://docs.clawd.bot)
+[![OpenClaw](https://img.shields.io/badge/Bot-OpenClaw-7C3AED.svg)](https://openclaw.ai)
 
 **日本語** | [English](README.en.md)
 
@@ -40,7 +40,7 @@ GLM-4.7 / OpenRouter APIキーを共有しつつ、各ボットは独立した�
 
 ## 概要
 
-このプロジェクトでは、**Clawdbot**を使用して3つの独立したDiscordボットをDocker Composeで運用します。各ボットは独自のゲートウェイプロセスとコンテナで動作し、GLM-4.7 AIモデルを共有します。
+このプロジェクトでは、**OpenClaw**を使用して3つの独立したDiscordボットをDocker Composeで運用します。各ボットは独自のゲートウェイプロセスとコンテナで動作し、GLM-4.7 AIモデルを共有します。
 
 ### 特徴
 
@@ -374,7 +374,7 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   └── header.png
 ├── docker/
 │   └── Dockerfile.infinity         # Infinity版用Dockerfile
-├── clawdbot/                       # Clawdbot ソース
+├── clawdbot/                       # OpenClaw ソース
 ├── config/
 │   ├── bot1/
 │   │   ├── clawdbot.json
@@ -570,8 +570,8 @@ sudo kill -9 <PID>
 
 ## 参考文献
 
-- [Clawdbot ドキュメント](https://docs.clawd.bot)
-- [Clawdbot GitHub](https://github.com/clawdbot/clawdbot)
+- [OpenClaw ドキュメント](https://docs.openclaw.ai)
+- [OpenClaw GitHub](https://github.com/openclaw/openclaw)
 - [Zhipu AI GLM API](https://open.bigmodel.cn/)
 - [OpenRouter ドキュメント](https://openrouter.ai/docs)
 - [Discord Developer Portal](https://discord.com/developers/applications)
@@ -581,8 +581,8 @@ sudo kill -9 <PID>
 
 ## ライセンス
 
-このプロジェクトは Clawdbot のセットアップ例です。
-詳細については [Clawdbot ライセンス](https://github.com/clawdbot/clawdbot/blob/main/LICENSE) を参照してください。
+このプロジェクトは OpenClaw のセットアップ例です。
+詳細については [OpenClaw ライセンス](https://github.com/openclaw/openclaw/blob/main/LICENSE) を参照してください。
 
 ---
 
