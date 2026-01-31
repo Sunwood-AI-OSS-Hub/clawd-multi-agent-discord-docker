@@ -5,6 +5,9 @@
 # Base image from the main Clawdbot build
 FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
 
+# Switch to root user for global installations
+USER root
+
 # Install Playwright browsers to shared location
 ENV PLAYWRIGHT_BROWSERS_PATH=/opt/playwright
 
