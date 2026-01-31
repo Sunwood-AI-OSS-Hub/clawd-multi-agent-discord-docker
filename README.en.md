@@ -431,27 +431,50 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 
 ### Bot Operations
 
+#### Standard Version
+
 ```bash
-# Start all bots
+# Start Bot 1 only
 docker compose up -d
 
+# Start all bots
+docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
+
 # Stop all bots
-docker compose down
+docker compose -f docker-compose.yml -f docker-compose.multi.yml down
 
 # Restart all bots
-docker compose restart
+docker compose -f docker-compose.yml -f docker-compose.multi.yml restart
 
 # Restart specific bot
-docker compose restart clawdbot-bot1
+docker compose -f docker-compose.yml -f docker-compose.multi.yml restart clawdbot-bot1
 
 # View logs for specific bot
-docker compose logs -f clawdbot-bot1
+docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f clawdbot-bot1
 
 # View all logs
-docker compose logs -f
+docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f
+```
+
+#### Infinity Version
+
+```bash
+# Start Bot 1 only
+docker compose -f docker-compose.infinity.yml up -d --build
+
+# Start all bots
+docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml up -d --build
+
+# Stop all bots
+docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml down
+
+# View logs
+docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml logs -f
 ```
 
 ### CLI Access
+
+#### Standard Version
 
 ```bash
 # Access CLI for bot1
@@ -462,14 +485,27 @@ docker compose --profile cli run --rm clawdbot-cli \
     channels add --channel discord --token "${DISCORD_BOT1_TOKEN}"
 ```
 
+#### Infinity Version
+
+```bash
+# Access Infinity CLI for bot1
+docker compose -f docker-compose.infinity.yml run --rm clawdbot-infinity-cli
+
+# Run as interactive shell
+docker compose -f docker-compose.infinity.yml run --rm clawdbot-infinity-cli bash
+```
+
 ### Container Access
 
 ```bash
 # Execute command in container
 docker exec -it clawdbot-bot1 node dist/index.js config set ...
 
-# Interactive shell
+# Interactive shell (Standard version)
 docker exec -it clawdbot-bot1 /bin/bash
+
+# Interactive shell (Infinity version)
+docker exec -it clawdbot-infinity-bot1 bash
 ```
 
 ---
