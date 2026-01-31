@@ -1,5 +1,5 @@
 services:
-  # Bot 1 - Gateway
+  # Bot 1 - Gateway (Main)
   clawdbot-bot1:
     image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
     build:
@@ -18,54 +18,6 @@ services:
       - ./workspace/bot1/skills:/app/skills:ro
     ports:
       - "18789:18789"
-    init: true
-    restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
-    networks:
-      - clawdbot-network
-
-  # Bot 2 - Gateway
-  clawdbot-bot2:
-    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
-    build:
-      context: ./clawdbot
-      dockerfile: Dockerfile
-    container_name: clawdbot-bot2
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT2_GATEWAY_TOKEN}
-      ZAI_API_KEY: ${ZAI_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
-    volumes:
-      - ./config/bot2:/home/node/.clawdbot
-      - ./workspace/bot2:/home/node/clawd
-    ports:
-      - "18791:18789"
-    init: true
-    restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
-    networks:
-      - clawdbot-network
-
-  # Bot 3 - Gateway
-  clawdbot-bot3:
-    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
-    build:
-      context: ./clawdbot
-      dockerfile: Dockerfile
-    container_name: clawdbot-bot3
-    environment:
-      HOME: /home/node
-      TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT3_GATEWAY_TOKEN}
-      ZAI_API_KEY: ${ZAI_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
-    volumes:
-      - ./config/bot3:/home/node/.clawdbot
-      - ./workspace/bot3:/home/node/clawd
-    ports:
-      - "18793:18789"
     init: true
     restart: unless-stopped
     command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
