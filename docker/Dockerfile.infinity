@@ -2,8 +2,8 @@
 # This image includes a non-root user with passwordless sudo access.
 # DO NOT use this in production environments.
 
-# Base image from the main Clawdbot build
-FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
+# Base image from the OpenClaw base build
+FROM ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base:latest
 
 # Switch to root user for global installations
 USER root
