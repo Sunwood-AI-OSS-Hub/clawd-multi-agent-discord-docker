@@ -131,9 +131,26 @@ cd clawd-multi-agent-discord-docker
 
 ### 2. Dockerイメージをビルド
 
+#### ローカルビルド
+
 ```bash
 docker build -t clawdbot:local ./clawdbot
 ```
+
+#### GitHub Container Registryからプル
+
+マルチアーキテクチャ対応イメージが公開されています：
+
+```bash
+docker pull ghcr.io/sunwood-ai-oss-hub/openclaw-agent3:latest
+```
+
+**対応プラットフォーム:**
+
+| プラットフォーム | 用途 |
+|:-----------------|:-----|
+| linux/amd64 | 通常のPC/サーバー |
+| linux/arm64 | Jetson, Raspberry Pi, Mac (Apple Silicon) |
 
 ### 3. 環境変数を設定
 
@@ -576,6 +593,7 @@ sudo kill -9 <PID>
 - [OpenRouter ドキュメント](https://openrouter.ai/docs)
 - [Discord Developer Portal](https://discord.com/developers/applications)
 - [Docker ドキュメント](https://docs.docker.com/)
+- [GitHub Container Registry](https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker/pkgs/container/openclaw-agent3)
 
 ---
 

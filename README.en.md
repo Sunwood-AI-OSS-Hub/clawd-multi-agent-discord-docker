@@ -131,9 +131,26 @@ cd clawd-multi-agent-discord-docker
 
 ### 2. Build Docker Image
 
+#### Local Build
+
 ```bash
 docker build -t clawdbot:local ./clawdbot
 ```
+
+#### Pull from GitHub Container Registry
+
+Multi-architecture images are available:
+
+```bash
+docker pull ghcr.io/sunwood-ai-oss-hub/openclaw-agent3:latest
+```
+
+**Supported Platforms:**
+
+| Platform | Use Case |
+|----------|----------|
+| linux/amd64 | Standard PC/Server |
+| linux/arm64 | Jetson, Raspberry Pi, Mac (Apple Silicon) |
 
 ### 3. Configure Environment
 
@@ -578,6 +595,7 @@ sudo kill -9 <PID>
 - [OpenRouter Documentation](https://openrouter.ai/docs)
 - [Discord Developer Portal](https://discord.com/developers/applications)
 - [Docker Documentation](https://docs.docker.com/)
+- [GitHub Container Registry](https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker/pkgs/container/openclaw-agent3)
 
 ---
 
