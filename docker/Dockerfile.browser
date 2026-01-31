@@ -1,5 +1,5 @@
-# Base image from the main Clawdbot build
-FROM ghcr.io/sunwood-ai-oss-hub/agentos-clawd-agent3:latest
+# Base image from the OpenClaw base build
+FROM ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base:latest
 
 # Install agent-browser globally
 RUN npm install -g agent-browser
