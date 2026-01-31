@@ -8,13 +8,14 @@
 [![Docker](https://img.shields.io/badge/Docker-Compose-blue.svg)](https://www.docker.com/)
 [![Discord](https://img.shields.io/badge/Discord-API%20v10-5865F2.svg)](https://discord.com/developers/docs)
 [![GLM-4.7](https://img.shields.io/badge/AI-GLM--4.7-FF6B6B.svg)](https://open.bigmodel.cn/)
+[![OpenRouter](https://img.shields.io/badge/AI-OpenRouter-8B5CF6.svg)](https://openrouter.ai/)
 [![Clawdbot](https://img.shields.io/badge/Bot-Clawdbot-7C3AED.svg)](https://docs.clawd.bot)
 
-**English** | [日本語](README.md)
+<a href="README.md"><img src="https://img.shields.io/badge/%E6%96%87%E6%9B%B8-%E6%97%A5%E6%9C%AC%E8%AA%9E-white.svg" alt="JA doc"/></a>
 
 **A complete setup for running 3 independent AI Discord bots** with Docker Compose
 
-Each bot runs with its own independent gateway process while sharing a single GLM-4.7 API key.
+Each bot runs with its own independent gateway process while sharing GLM-4.7 / OpenRouter API keys.
 
 </div>
 
@@ -42,8 +43,8 @@ This project runs **3 independent Discord bots** using **Clawdbot** with Docker 
 ### Features
 
 - **3 Independent Bots**: Each bot runs as a separate process
-- **Shared AI Model**: Share GLM-4.7 API key across all bots
-- **Docker Compose**: One-command startup and management
+- **Multiple AI Providers**: Supports GLM-4.7 / OpenRouter
+- **Split Docker Compose Configuration**: Flexible deployment with Standard and Infinity versions
 - **Isolated Workspaces**: Dedicated workspace for each bot
 - **Easy Configuration**: JSON-based configuration management
 
@@ -95,8 +96,19 @@ This project runs **3 independent Discord bots** using **Clawdbot** with Docker 
 ## Prerequisites
 
 - [Docker](https://docs.docker.com/get-docker/) and [Docker Compose v2](https://docs.docker.com/compose/install/)
-- [Zhipu AI GLM-4.7](https://open.bigmodel.cn/) API Key
+- [Zhipu AI GLM-4.7](https://open.bigmodel.cn/) API Key or [OpenRouter](https://openrouter.ai/) API Key (or both)
 - 3 [Discord Bot Tokens](https://discord.com/developers/applications)
+
+### AI Providers
+
+This project supports the following AI providers:
+
+| Provider | Models | Environment Variable | Features |
+|----------|--------|---------------------|----------|
+| **Zhipu AI (GLM)** | GLM-4.7 | `ZAI_API_KEY` | High-performance Chinese/Japanese model |
+| **OpenRouter** | Multiple models | `OPENROUTER_API_KEY` | Access to Claude, GPT-4, and many more |
+
+You can configure both API keys and switch between them as needed.
 
 ### Discord Bot Required Intents
 
@@ -145,8 +157,9 @@ CLAWDBOT_BOT1_GATEWAY_TOKEN=your_token_1
 CLAWDBOT_BOT2_GATEWAY_TOKEN=your_token_2
 CLAWDBOT_BOT3_GATEWAY_TOKEN=your_token_3
 
-# GLM 4.7 API Key (shared)
-GLM_API_KEY=your_glm_api_key
+# AI API Keys (configure only the providers you need)
+ZAI_API_KEY=your_glm_api_key
+OPENROUTER_API_KEY=your_openrouter_api_key
 
 # Discord Bot Tokens (3 separate accounts)
 DISCORD_BOT1_TOKEN=your_discord_token_1
@@ -160,12 +173,14 @@ Each bot requires configuration files in `config/bot*/`:
 
 #### `models.json` (same for all bots)
 
+**For Zhipu AI (GLM):**
+
 ```json
 {
   "mode": "append",
   "providers": {
-    "glm": {
-      "baseUrl": "https://open.bigmodel.cn/api/paas/v4/",
+    "zai": {
+      "baseUrl": "https://api.zai.ai/v1/",
       "apiKey": "your_glm_api_key",
       "api": "openai-completions",
       "models": [
@@ -179,14 +194,99 @@ Each bot requires configuration files in `config/bot*/`:
 }
 ```
 
+**For OpenRouter:**
+
+```json
+{
+  "mode": "append",
+  "providers": {
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1/",
+      "apiKey": "your_openrouter_api_key",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "anthropic/claude-3.5-sonnet",
+          "name": "Claude 3.5 Sonnet"
+        },
+        {
+          "id": "openai/gpt-4o",
+          "name": "GPT-4o"
+        }
+      ]
+    }
+  }
+}
+```
+
+**For Both Providers:**
+
+```json
+{
+  "mode": "append",
+  "providers": {
+    "zai": {
+      "baseUrl": "https://api.zai.ai/v1/",
+      "apiKey": "your_glm_api_key",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "glm-4.7",
+          "name": "GLM-4.7"
+        }
+      ]
+    },
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1/",
+      "apiKey": "your_openrouter_api_key",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "anthropic/claude-3.5-sonnet",
+          "name": "Claude 3.5 Sonnet"
+        }
+      ]
+    }
+  }
+}
+```
+
 #### `clawdbot.json` (same for all bots)
+
+**For GLM-4.7:**
 
 ```json
 {
   "agents": {
     "defaults": {
       "model": {
-        "primary": "glm/glm-4.7"
+        "primary": "zai/glm-4.7"
+      }
+    }
+  },
+  "channels": {
+    "discord": {
+      "enabled": true,
+      "groupPolicy": "open"
+    }
+  },
+  "gateway": {
+    "mode": "local"
+  },
+  "messages": {
+    "ackReactionScope": "all"
+  }
+}
+```
+
+**For OpenRouter (Claude):**
+
+```json
+{
+  "agents": {
+    "defaults": {
+      "model": {
+        "primary": "openrouter/anthropic/claude-3.5-sonnet"
       }
     }
   },
@@ -207,15 +307,49 @@ Each bot requires configuration files in `config/bot*/`:
 
 ### 5. Start Bots
 
+Docker Compose configurations are split into 4 files for different use cases:
+
+#### Configuration Files
+
+| File | Purpose | Description |
+|------|---------|-------------|
+| `docker-compose.yml` | Standard - Bot 1 | Simple configuration for main bot (Bot 1) only |
+| `docker-compose.multi.yml` | Standard - Bot 2&3 | Additional bots (Bot 2, 3) configuration |
+| `docker-compose.infinity.yml` | Infinity - Bot 1 | Development-enabled Bot 1 (Playwright, gh CLI, etc.) |
+| `docker-compose.infinity.multi.yml` | Infinity - Bot 2&3 | Development-enabled Bot 2, 3 |
+
+#### Standard Version (Production)
+
 ```bash
-# Start all bots
+# Start Bot 1 only
 docker compose up -d
 
+# Start all bots (Bot 1 + Bot 2&3)
+docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
+
 # Check status
-docker compose ps
+docker compose -f docker-compose.yml -f docker-compose.multi.yml ps
 
 # View logs
-docker compose logs -f
+docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f
+```
+
+#### Infinity Version (Development)
+
+The Infinity version includes additional features:
+- **Playwright** - Browser automation
+- **GitHub CLI (gh)** - GitHub operations
+- **Non-root user** - Enhanced security
+
+```bash
+# Start Bot 1 only
+docker compose -f docker-compose.infinity.yml up -d --build
+
+# Start all bots (Bot 1 + Bot 2&3)
+docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml up -d --build
+
+# View logs
+docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml logs -f
 ```
 
 ---
@@ -226,14 +360,19 @@ docker compose logs -f
 
 ```
 ./
-├── docker-compose.yml
+├── docker-compose.yml              # Standard - Bot 1
+├── docker-compose.multi.yml        # Standard - Bot 2&3
+├── docker-compose.infinity.yml     # Infinity - Bot 1
+├── docker-compose.infinity.multi.yml  # Infinity - Bot 2&3
 ├── .env
 ├── .env.example
 ├── README.md
 ├── setup.sh
 ├── assets/
-│   └── header.svg
-├── clawdbot/          # Clawdbot source
+│   └── header.png
+├── docker/
+│   └── Dockerfile.infinity         # Infinity version Dockerfile
+├── clawdbot/                       # Clawdbot source
 ├── config/
 │   ├── bot1/
 │   │   ├── clawdbot.json
@@ -263,7 +402,7 @@ docker compose logs -f
 
 | Option | Value | Description |
 |--------|-------|-------------|
-| `agents.defaults.model.primary` | `glm/glm-4.7` | Primary AI model |
+| `agents.defaults.model.primary` | `zai/glm-4.7` or `openrouter/...` | Primary AI model |
 | `channels.discord.enabled` | `true` | Enable Discord |
 | `channels.discord.groupPolicy` | `open` | Response policy (`open`/`allowlist`) |
 | `messages.ackReactionScope` | `all` | Reaction scope (`all`/`group-mentions`) |
@@ -281,8 +420,10 @@ docker compose logs -f
 | Option | Value | Description |
 |--------|-------|-------------|
 | `mode` | `append` | Append to existing providers |
-| `providers.glm.baseUrl` | GLM API endpoint | Zhipu AI API URL |
-| `providers.glm.api` | `openai-completions` | OpenAI compatibility mode |
+| `providers.zai.baseUrl` | ZAI API endpoint | Zhipu AI API URL |
+| `providers.zai.api` | `openai-completions` | OpenAI compatibility mode |
+| `providers.openrouter.baseUrl` | OpenRouter API endpoint | OpenRouter API URL |
+| `providers.openrouter.api` | `openai-completions` | OpenAI compatibility mode |
 
 ---
 
@@ -396,6 +537,7 @@ sudo kill -9 <PID>
 - [Clawdbot Documentation](https://docs.clawd.bot)
 - [Clawdbot GitHub](https://github.com/clawdbot/clawdbot)
 - [Zhipu AI GLM API](https://open.bigmodel.cn/)
+- [OpenRouter Documentation](https://openrouter.ai/docs)
 - [Discord Developer Portal](https://discord.com/developers/applications)
 - [Docker Documentation](https://docs.docker.com/)
 
