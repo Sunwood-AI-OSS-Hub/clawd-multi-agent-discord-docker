@@ -1,0 +1,55 @@
+services:
+  # Bot 1 - Gateway (Main)
+  openclaw-bot1:
+    image: ${IMAGE_REGISTRY:-openclaw}:${IMAGE_TAG:-local}
+    build:
+      context: ./openclaw
+      dockerfile: Dockerfile
+    container_name: openclaw-bot1
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT1_GATEWAY_TOKEN}
+      ZAI_API_KEY: ${ZAI_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+      DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
+    volumes:
+      - ./config/bot1:/home/node/.openclaw
+      - ./workspace/bot1:/home/node/clawd
+      - ./workspace/bot1/skills:/app/skills:ro
+    ports:
+      - "18789:18789"
+    init: true
+    restart: unless-stopped
+    command: ["sh", "-c", "rm -f /home/node/.openclaw/*.lock && exec node dist/index.js gateway"]
+    networks:
+      - openclaw-network
+
+  # CLI for setup
+  openclaw-cli:
+    image: ${IMAGE_REGISTRY:-openclaw}:${IMAGE_TAG:-local}
+    build:
+      context: ./openclaw
+      dockerfile: Dockerfile
+    container_name: openclaw-cli
+    environment:
+      HOME: /home/node
+      TERM: xterm-256color
+      BROWSER: echo
+      ZAI_API_KEY: ${ZAI_API_KEY}
+      OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
+    volumes:
+      - ./config/bot1:/home/node/.openclaw
+      - ./workspace/bot1:/home/node/clawd
+    stdin_open: true
+    tty: true
+    init: true
+    entrypoint: ["node", "dist/index.js"]
+    profiles:
+      - cli
+    networks:
+      - openclaw-network
+
+networks:
+  openclaw-network:
+    driver: bridge
