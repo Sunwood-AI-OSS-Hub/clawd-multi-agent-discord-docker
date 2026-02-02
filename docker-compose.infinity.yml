@@ -76,7 +76,7 @@ services:
       - ./data/screenshots:/app/screenshots
       - ./data/chrome-profile:/app/chrome-profile
     environment:
-      - ALLOWED_ORIGINS=*
+      - ALLOWED_ORIGINS=${BROWSER_API_ALLOWED_ORIGINS:-http://localhost:3000}
     networks:
       - infinity-network
     restart: unless-stopped
