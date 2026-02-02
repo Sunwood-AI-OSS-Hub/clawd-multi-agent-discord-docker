@@ -1,0 +1,20 @@
+{
+  "mode": "append",
+  "providers": {
+    "openrouter": {
+      "baseUrl": "https://openrouter.ai/api/v1/",
+      "apiKey": "${OPENROUTER_API_KEY}",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "anthropic/claude-3.5-sonnet",
+          "name": "Claude 3.5 Sonnet"
+        },
+        {
+          "id": "openai/gpt-4o",
+          "name": "GPT-4o"
+        }
+      ]
+    }
+  }
+}

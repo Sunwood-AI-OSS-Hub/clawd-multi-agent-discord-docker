@@ -122,14 +122,84 @@ GLM-4.7 / OpenRouter APIキーを共有しつつ、各ボットは独立した�
 
 ## クイックスタート
 
-### 1. リポジトリをクローン
+### 🚀 シンプルセットアップ
+
+`config/examples/` にある設定ファイルをコピーするだけで、簡単にセットアップできます。
+
+```bash
+# 1. リポジトリをクローン
+git clone --recursive https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
+cd clawd-multi-agent-discord-docker
+
+# 2. .envファイルを設定
+cp .env.example .env
+nano .env  # お好みのエディタで編集
+```
+
+`.env` に以下を設定：
+- `ZAI_API_KEY` または `OPENROUTER_API_KEY`（AIプロバイダーのAPIキー）
+- `DISCORD_BOT1_TOKEN`, `DISCORD_BOT2_TOKEN`, `DISCORD_BOT3_TOKEN`（Discordボットトークン）
+- ゲートウェイトークン（`openssl rand -hex 32` で生成）
+
+```bash
+# 3. 設定ファイルをコピー（ZAIを使用する場合）
+for bot in bot1 bot2 bot3; do
+    mkdir -p config/$bot/cron
+    cp config/examples/models.json.example config/$bot/models.json
+    cp config/examples/openclaw.json.example config/$bot/openclaw.json
+    echo '{"jobs":[]}' > config/$bot/cron/jobs.json
+done
+```
+
+OpenRouterを使用する場合は、`models.openrouter.json.example` と `openclaw.openrouter.json.example` をコピーしてください。
+
+```bash
+# 4. ボットを起動
+docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
+```
+
+### 📡 リモートマシンでのセットアップ（SSH経由）
+
+WindowsからSSHでJetsonなどのリモートマシンにセットアップする場合：
+
+```bash
+# 1. ローカルで.envファイルを準備
+# D:\Prj\jetson-nano-ws\.env にAPIキーとトークンを設定
+
+# 2. リモートマシンにSSH接続
+ssh maki-jetson
+cd ~/Prj
+
+# 3. リポジトリをクローン（まだの場合）
+git clone --recursive https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
+cd clawd-multi-agent-discord-docker
+
+# 4. ローカルの.envを転送
+# 別のターミナルで：
+scp D:\Prj\jetson-nano-ws\.env maki-jetson:~/Prj/clawd-multi-agent-discord-docker/.env
+
+# 5. 設定ファイルをコピー（SSH接続したターミナルで）
+for bot in bot1 bot2 bot3; do
+    mkdir -p config/$bot/cron
+    cp config/examples/models.json.example config/$bot/models.json
+    cp config/examples/openclaw.json.example config/$bot/openclaw.json
+    echo '{"jobs":[]}' > config/$bot/cron/jobs.json
+done
+
+# 6. ボットを起動
+docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
+```
+
+---
+
+### 詳細設定（手動でJSONを編集する場合）
 
 ```bash
 git clone --recursive https://github.com/Sunwood-AI-OSS-Hub/clawd-multi-agent-discord-docker.git
 cd clawd-multi-agent-discord-docker
 ```
 
-### 2. Dockerイメージをビルド
+#### 2. Dockerイメージをビルド
 
 #### ローカルビルド
 
@@ -386,13 +456,19 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 ├── .env
 ├── .env.example
 ├── README.md
-├── setup.sh
+├── setup.sh                        # 自動セットアップスクリプト
 ├── assets/
 │   └── header.png
 ├── docker/
 │   └── Dockerfile.infinity         # Infinity版用Dockerfile
 ├── openclaw/                       # OpenClaw ソース
 ├── config/
+│   ├── examples/                   # ⭐ 設定ファイルのexample
+│   │   ├── models.json.example           # ZAI用モデル設定
+│   │   ├── models.openrouter.json.example # OpenRouter用
+│   │   ├── models.both.json.example       # 両方使用
+│   │   ├── openclaw.json.example         # ZAI用ボット設定
+│   │   └── openclaw.openrouter.json.example # OpenRouter用
 │   ├── bot1/
 │   │   ├── openclaw.json
 │   │   ├── models.json
@@ -413,6 +489,22 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
     ├── bot1/
     ├── bot2/
     └── bot3/
+```
+
+### config/examples/ について
+
+`config/examples/` ディレクトリには、設定ファイルのテンプレートが含まれています。これらをコピーして使用することで、簡単に設定できます。
+
+#### 使用方法
+
+```bash
+# ZAI (GLM-4.7) を使用する場合
+cp config/examples/models.json.example config/bot1/models.json
+cp config/examples/openclaw.json.example config/bot1/openclaw.json
+
+# OpenRouter を使用する場合
+cp config/examples/models.openrouter.json.example config/bot2/models.json
+cp config/examples/openclaw.openrouter.json.example config/bot2/openclaw.json
 ```
 
 ### 設定オプション

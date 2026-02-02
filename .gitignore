@@ -8,12 +8,17 @@
 !*.example
 
 # config内のシークレット・一時ファイル
-config/**/models.json
 config/**/sessions/
 config/**/*.lock
 config/**/*.bak
 config/**/update-check.json
 config/**/*llm-secrets.sh
+
+# Bot configurations (exclude user configs, but keep examples)
+config/bot1/
+config/bot2/
+config/bot3/
+!config/examples/
 
 # workspace（別のGitリポジトリ）
 workspace/
@@ -67,18 +72,9 @@ yarn-error.log*
 *.pid
 *.seed
 *.pid.lock
+
+# Other
 RELEASE_NOTES.md
-config/bot1/cron/jobs.json
-
-# Local bot configurations
-config/bot1/
-config/bot2/
-config/bot3/cron/
-config/bot3/devices/
-config/bot3/identity/
-openclaw-aquarium-gateway-token.txt
-
-docs/
 openclaw-aquarium-gateway-token.txt
 clawdbot-aquarium-gateway-token.txt
-RELEASE_NOTES.md
+docs/

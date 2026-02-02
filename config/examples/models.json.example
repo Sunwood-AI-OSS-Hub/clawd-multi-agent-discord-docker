@@ -1,0 +1,16 @@
+{
+  "mode": "append",
+  "providers": {
+    "zai": {
+      "baseUrl": "https://api.z.ai/api/coding/paas/v4",
+      "apiKey": "${ZAI_API_KEY}",
+      "api": "openai-completions",
+      "models": [
+        {
+          "id": "glm-4.7",
+          "name": "zai/glm-4.7"
+        }
+      ]
+    }
+  }
+}
