@@ -1,6 +1,6 @@
 services:
-  # Bot 1 - Gateway (Main)
-  openclaw-bot1:
+  # Agent 1 - Gateway (Main)
+  openclaw-agent1:
     # NOTE: Using 'latest' tag for convenience. For production, pin to specific version:
     #   IMAGE_TAG=v0.2.1  # Example: Pin to specific release
     image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
@@ -8,17 +8,17 @@ services:
     # build:
     #   context: ./openclaw
     #   dockerfile: Dockerfile
-    container_name: openclaw-bot1
+    container_name: openclaw-agent1
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT1_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_AGENT1_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
+      DISCORD_BOT_TOKEN: ${DISCORD_AGENT1_TOKEN}
     volumes:
-      - ./config/bot1:/home/node/.openclaw
-      - ./workspace/bot1:/home/node/.openclaw/workspace
+      - ./config/agent1:/home/node/.openclaw
+      - ./workspace/agent1:/home/node/.openclaw/workspace
     ports:
       - "18789:18789"
     init: true
@@ -44,8 +44,8 @@ services:
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
     volumes:
-      - ./config/bot1:/home/node/.openclaw
-      - ./workspace/bot1:/home/node/.openclaw/workspace
+      - ./config/agent1:/home/node/.openclaw
+      - ./workspace/agent1:/home/node/.openclaw/workspace
     stdin_open: true
     tty: true
     init: true

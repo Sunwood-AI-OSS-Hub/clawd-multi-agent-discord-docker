@@ -1,5 +1,5 @@
 # =============================================================================
-# OpenClaw Infinity - Development Environment (Main Bot)
+# OpenClaw Infinity - Development Environment (Main Agent)
 # =============================================================================
 # Features:
 # - agent-browser installed
@@ -8,29 +8,33 @@
 #
 # Usage:
 #   docker compose -f docker-compose.infinity.yml up -d
-#   docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-bot1
+#   docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-agent1
 # =============================================================================
 
 services:
-  # Bot 1 - Gateway (Infinity)
-  openclaw-infinity-bot1:
+  # Agent 1 - Gateway (Infinity)
+  openclaw-infinity-agent1:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: openclaw-infinity-bot1
+    container_name: openclaw-infinity-agent1
     environment:
       HOME: /home/agent
       TERM: xterm-256color
       PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT1_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_AGENT1_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
-      GITHUB_TOKEN: ${GH_PAT_BOT1}
+      DISCORD_BOT_TOKEN: ${DISCORD_AGENT1_TOKEN}
+      GITHUB_TOKEN: ${GH_PAT_AGENT1}
     volumes:
-      - ./config/bot1:/home/agent/.openclaw
-      - ./workspace/bot1:/home/agent/.openclaw/workspace
+      - ./config/agent1:/home/agent/.openclaw
+      - ./workspace/agent1:/home/agent/.openclaw/workspace
+    devices:
+      - "/dev/video0:/dev/video0"
+    group_add:
+      - video
     ports:
       - "18789:18789"
       - "3001:3000"
@@ -53,10 +57,10 @@ services:
       BROWSER: echo
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      GITHUB_TOKEN: ${GH_PAT_BOT1}
+      GITHUB_TOKEN: ${GH_PAT_AGENT1}
     volumes:
-      - ./config/bot1:/home/agent/.openclaw
-      - ./workspace/bot1:/home/agent/.openclaw/workspace
+      - ./config/agent1:/home/agent/.openclaw
+      - ./workspace/agent1:/home/agent/.openclaw/workspace
     stdin_open: true
     tty: true
     init: true

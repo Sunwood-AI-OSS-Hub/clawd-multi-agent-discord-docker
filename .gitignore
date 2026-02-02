@@ -14,8 +14,8 @@ config/**/*.bak
 config/**/update-check.json
 config/**/*llm-secrets.sh
 
-# Bot configurations (exclude user configs, but keep examples)
-config/bot1/
+# Agent/Bot configurations (exclude user configs, but keep examples)
+config/agent1/
 config/bot2/
 config/bot3/
 !config/examples/

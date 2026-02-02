@@ -26,9 +26,9 @@
 各ボットのconfigディレクトリにコピーします：
 
 ```bash
-# Bot 1 の場合（ZAIを使用）
-cp config/examples/models.json.example config/bot1/models.json
-cp config/examples/openclaw.json.example config/bot1/openclaw.json
+# Agent 1 の場合（ZAIを使用）
+cp config/examples/models.json.example config/agent1/models.json
+cp config/examples/openclaw.json.example config/agent1/openclaw.json
 
 # Bot 2 の場合（OpenRouterを使用）
 cp config/examples/models.openrouter.json.example config/bot2/models.json

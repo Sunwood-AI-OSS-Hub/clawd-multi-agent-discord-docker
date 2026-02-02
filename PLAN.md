@@ -42,7 +42,7 @@ MultimediaOS-MUGEN/
 ├── openclaw/
 │   └── skills/           # スキル統合先
 ├── workspace/
-│   ├── bot1/
+│   ├── agent1/
 │   ├── bot2/
 │   └── bot3/
 └── outputs/              # 新規作成：マルチメディア出力用
@@ -325,7 +325,7 @@ docker/
 │           │   └── photos.ts
 │           └── references/
 ├── workspace/
-│   └── bot1/
+│   └── agent1/
 │       └── browser-sessions/  # セッション保存先（ボリュームマウント）
 └── config/
     └── browser/

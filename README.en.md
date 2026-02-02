@@ -58,7 +58,7 @@ This project runs **3 independent Discord bots** using **OpenClaw** with Docker 
 ├─────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
 │  │  openclaw-   │  │  openclaw-   │  │  openclaw-   │      │
-│  │    bot1      │  │    bot2      │  │    bot3      │      │
+│  │    agent1      │  │    bot2      │  │    bot3      │      │
 │  │  (CL1-Kuroha)│  │  (CL2-Reika) │  │ (CL3-Sentinel)│     │
 │  │              │  │              │  │              │      │
 │  │  Gateway     │  │  Gateway     │  │  Gateway     │      │
@@ -87,7 +87,7 @@ This project runs **3 independent Discord bots** using **OpenClaw** with Docker 
 
 | Bot Name | Port | Description |
 |----------|------|-------------|
-| CL1-Kuroha | 18789 | Bot 1 - Main Agent |
+| CL1-Kuroha | 18789 | Agent 1 - Main Agent |
 | CL2-Reika  | 18791 | Bot 2 - Support Agent |
 | CL3-Sentinel | 18793 | Bot 3 - Monitor Agent |
 
@@ -161,7 +161,7 @@ cp .env.example .env
 Generate gateway tokens (3 separate tokens):
 
 ```bash
-openssl rand -hex 32  # Bot 1
+openssl rand -hex 32  # Agent 1
 openssl rand -hex 32  # Bot 2
 openssl rand -hex 32  # Bot 3
 ```
@@ -170,7 +170,7 @@ Edit `.env`:
 
 ```bash
 # Gateway tokens (3 unique values)
-OPENCLAW_BOT1_GATEWAY_TOKEN=your_token_1
+OPENCLAW_AGENT1_GATEWAY_TOKEN=your_token_1
 OPENCLAW_BOT2_GATEWAY_TOKEN=your_token_2
 OPENCLAW_BOT3_GATEWAY_TOKEN=your_token_3
 
@@ -179,7 +179,7 @@ ZAI_API_KEY=your_glm_api_key
 OPENROUTER_API_KEY=your_openrouter_api_key
 
 # Discord Bot Tokens (3 separate accounts)
-DISCORD_BOT1_TOKEN=your_discord_token_1
+DISCORD_AGENT1_TOKEN=your_discord_token_1
 DISCORD_BOT2_TOKEN=your_discord_token_2
 DISCORD_BOT3_TOKEN=your_discord_token_3
 ```
@@ -330,18 +330,18 @@ Docker Compose configurations are split into 4 files for different use cases:
 
 | File | Purpose | Description |
 |------|---------|-------------|
-| `docker-compose.yml` | Standard - Bot 1 | Simple configuration for main bot (Bot 1) only |
+| `docker-compose.yml` | Standard - Agent 1 | Simple configuration for main bot (Agent 1) only |
 | `docker-compose.multi.yml` | Standard - Bot 2&3 | Additional bots (Bot 2, 3) configuration |
-| `docker-compose.infinity.yml` | Infinity - Bot 1 | Development-enabled Bot 1 (Playwright, gh CLI, etc.) |
+| `docker-compose.infinity.yml` | Infinity - Agent 1 | Development-enabled Agent 1 (Playwright, gh CLI, etc.) |
 | `docker-compose.infinity.multi.yml` | Infinity - Bot 2&3 | Development-enabled Bot 2, 3 |
 
 #### Standard Version (Production)
 
 ```bash
-# Start Bot 1 only
+# Start Agent 1 only
 docker compose up -d
 
-# Start all bots (Bot 1 + Bot 2&3)
+# Start all bots (Agent 1 + Bot 2&3)
 docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
 
 # Check status
@@ -359,10 +359,10 @@ The Infinity version includes additional features:
 - **Non-root user** - Enhanced security
 
 ```bash
-# Start Bot 1 only
+# Start Agent 1 only
 docker compose -f docker-compose.infinity.yml up -d --build
 
-# Start all bots (Bot 1 + Bot 2&3)
+# Start all bots (Agent 1 + Bot 2&3)
 docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml up -d --build
 
 # View logs
@@ -377,9 +377,9 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 
 ```
 ./
-├── docker-compose.yml              # Standard - Bot 1
+├── docker-compose.yml              # Standard - Agent 1
 ├── docker-compose.multi.yml        # Standard - Bot 2&3
-├── docker-compose.infinity.yml     # Infinity - Bot 1
+├── docker-compose.infinity.yml     # Infinity - Agent 1
 ├── docker-compose.infinity.multi.yml  # Infinity - Bot 2&3
 ├── .env
 ├── .env.example
@@ -391,7 +391,7 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   └── Dockerfile.infinity         # Infinity version Dockerfile
 ├── openclaw/                       # OpenClaw source
 ├── config/
-│   ├── bot1/
+│   ├── agent1/
 │   │   ├── openclaw.json
 │   │   ├── models.json
 │   │   └── cron/
@@ -408,7 +408,7 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   │       └── jobs.json
 │   └── openclaw.json  # Global config
 └── workspace/
-    ├── bot1/
+    ├── agent1/
     ├── bot2/
     └── bot3/
 ```
@@ -462,7 +462,7 @@ Each bot container uses the following volume mounts:
 #### Standard Version
 
 ```bash
-# Start Bot 1 only
+# Start Agent 1 only
 docker compose up -d
 
 # Start all bots
@@ -475,10 +475,10 @@ docker compose -f docker-compose.yml -f docker-compose.multi.yml down
 docker compose -f docker-compose.yml -f docker-compose.multi.yml restart
 
 # Restart specific bot
-docker compose -f docker-compose.yml -f docker-compose.multi.yml restart openclaw-bot1
+docker compose -f docker-compose.yml -f docker-compose.multi.yml restart openclaw-agent1
 
 # View logs for specific bot
-docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f openclaw-bot1
+docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f openclaw-agent1
 
 # View all logs
 docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f
@@ -487,7 +487,7 @@ docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f
 #### Infinity Version
 
 ```bash
-# Start Bot 1 only
+# Start Agent 1 only
 docker compose -f docker-compose.infinity.yml up -d --build
 
 # Start all bots
@@ -505,18 +505,18 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 #### Standard Version
 
 ```bash
-# Access CLI for bot1
+# Access CLI for agent1
 docker compose --profile cli run --rm openclaw-cli
 
 # Add Discord channel via CLI
 docker compose --profile cli run --rm openclaw-cli \
-    channels add --channel discord --token "${DISCORD_BOT1_TOKEN}"
+    channels add --channel discord --token "${DISCORD_AGENT1_TOKEN}"
 ```
 
 #### Infinity Version
 
 ```bash
-# Access Infinity CLI for bot1
+# Access Infinity CLI for agent1
 docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-cli
 
 # Run as interactive shell
@@ -527,13 +527,13 @@ docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-cli bas
 
 ```bash
 # Execute command in container
-docker exec -it openclaw-bot1 node dist/index.js config set ...
+docker exec -it openclaw-agent1 node dist/index.js config set ...
 
 # Interactive shell (Standard version)
-docker exec -it openclaw-bot1 /bin/bash
+docker exec -it openclaw-agent1 /bin/bash
 
 # Interactive shell (Infinity version)
-docker exec -it openclaw-infinity-bot1 bash
+docker exec -it openclaw-infinity-agent1 bash
 ```
 
 ---

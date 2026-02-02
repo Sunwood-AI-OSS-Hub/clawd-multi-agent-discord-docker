@@ -58,7 +58,7 @@ GLM-4.7 / OpenRouter APIキーを共有しつつ、各ボットは独立した�
 ├─────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
 │  │  openclaw-   │  │  openclaw-   │  │  openclaw-   │      │
-│  │    bot1      │  │    bot2      │  │    bot3      │      │
+│  │    agent1      │  │    bot2      │  │    bot3      │      │
 │  │  (CL1-Kuroha)│  │  (CL2-Reika) │  │ (CL3-Sentinel)│     │
 │  │              │  │              │  │              │      │
 │  │  Gateway     │  │  Gateway     │  │  Gateway     │      │
@@ -87,7 +87,7 @@ GLM-4.7 / OpenRouter APIキーを共有しつつ、各ボットは独立した�
 
 | ボット名 | ポート | 説明 |
 |---------|--------|------|
-| CL1-Kuroha | 18789 | Bot 1 - メインエージェント |
+| CL1-Kuroha | 18789 | Agent 1 - メインエージェント |
 | CL2-Reika | 18791 | Bot 2 - サポートエージェント |
 | CL3-Sentinel | 18793 | Bot 3 - モニターエージェント |
 
@@ -136,12 +136,12 @@ nano .env  # お好みのエディタで編集
 
 `.env` に以下を設定：
 - `ZAI_API_KEY` または `OPENROUTER_API_KEY`（AIプロバイダーのAPIキー）
-- `DISCORD_BOT1_TOKEN`, `DISCORD_BOT2_TOKEN`, `DISCORD_BOT3_TOKEN`（Discordボットトークン）
+- `DISCORD_AGENT1_TOKEN`, `DISCORD_BOT2_TOKEN`, `DISCORD_BOT3_TOKEN`（Discordボットトークン）
 - ゲートウェイトークン（`openssl rand -hex 32` で生成）
 
 ```bash
 # 3. 設定ファイルをコピー（ZAIを使用する場合）
-for bot in bot1 bot2 bot3; do
+for bot in agent1 bot2 bot3; do
     mkdir -p config/$bot/cron
     cp config/examples/models.json.example config/$bot/models.json
     cp config/examples/openclaw.json.example config/$bot/openclaw.json
@@ -177,7 +177,7 @@ cd OpenClaw-Docker
 scp D:\Prj\jetson-nano-ws\.env maki-jetson:~/Prj/OpenClaw-Docker/.env
 
 # 5. 設定ファイルをコピー（SSH接続したターミナルで）
-for bot in bot1 bot2 bot3; do
+for bot in agent1 bot2 bot3; do
     mkdir -p config/$bot/cron
     cp config/examples/models.json.example config/$bot/models.json
     cp config/examples/openclaw.json.example config/$bot/openclaw.json
@@ -231,7 +231,7 @@ cp .env.example .env
 ゲートウェイトークンを生成します（3つの別々のトークン）：
 
 ```bash
-openssl rand -hex 32  # Bot 1 用
+openssl rand -hex 32  # Agent 1 用
 openssl rand -hex 32  # Bot 2 用
 openssl rand -hex 32  # Bot 3 用
 ```
@@ -240,7 +240,7 @@ openssl rand -hex 32  # Bot 3 用
 
 ```bash
 # ゲートウェイトークン（3つの異なる値）
-OPENCLAW_BOT1_GATEWAY_TOKEN=生成したトークン1
+OPENCLAW_AGENT1_GATEWAY_TOKEN=生成したトークン1
 OPENCLAW_BOT2_GATEWAY_TOKEN=生成したトークン2
 OPENCLAW_BOT3_GATEWAY_TOKEN=生成したトークン3
 
@@ -249,7 +249,7 @@ ZAI_API_KEY=あなたのGLM_APIキー
 OPENROUTER_API_KEY=あなたのOPENROUTER_APIキー
 
 # Discord Botトークン（3つの別々のアカウント）
-DISCORD_BOT1_TOKEN=あなたのDiscordトークン1
+DISCORD_AGENT1_TOKEN=あなたのDiscordトークン1
 DISCORD_BOT2_TOKEN=あなたのDiscordトークン2
 DISCORD_BOT3_TOKEN=あなたのDiscordトークン3
 ```
@@ -400,18 +400,18 @@ Docker Compose設定は用途に合わせて4つのファイルに分割され�
 
 | ファイル | 用途 | 説明 |
 |---------|------|------|
-| `docker-compose.yml` | Standard版 - Bot 1 | メインボット（Bot 1）のみのシンプル構成 |
+| `docker-compose.yml` | Standard版 - Agent 1 | メインボット（Agent 1）のみのシンプル構成 |
 | `docker-compose.multi.yml` | Standard版 - Bot 2&3 | 追加ボット（Bot 2, 3）の構成 |
-| `docker-compose.infinity.yml` | Infinity版 - Bot 1 | 開発用機能付きBot 1（Playwright、gh CLI等） |
+| `docker-compose.infinity.yml` | Infinity版 - Agent 1 | 開発用機能付きAgent 1（Playwright、gh CLI等） |
 | `docker-compose.infinity.multi.yml` | Infinity版 - Bot 2&3 | 開発用機能付きBot 2, 3 |
 
 #### Standard版（本番運用向け）
 
 ```bash
-# Bot 1 のみを起動
+# Agent 1 のみを起動
 docker compose up -d
 
-# 全てのボットを起動（Bot 1 + Bot 2&3）
+# 全てのボットを起動（Agent 1 + Bot 2&3）
 docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
 
 # ステータス確認
@@ -429,10 +429,10 @@ Infinity版には以下の追加機能が含まれます：
 - **非rootユーザー** - セキュリティ強化
 
 ```bash
-# Bot 1 のみを起動
+# Agent 1 のみを起動
 docker compose -f docker-compose.infinity.yml up -d --build
 
-# 全てのボットを起動（Bot 1 + Bot 2&3）
+# 全てのボットを起動（Agent 1 + Bot 2&3）
 docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml up -d --build
 
 # ログ表示
@@ -447,9 +447,9 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 
 ```
 ./
-├── docker-compose.yml              # Standard版 - Bot 1
+├── docker-compose.yml              # Standard版 - Agent 1
 ├── docker-compose.multi.yml        # Standard版 - Bot 2&3
-├── docker-compose.infinity.yml     # Infinity版 - Bot 1
+├── docker-compose.infinity.yml     # Infinity版 - Agent 1
 ├── docker-compose.infinity.multi.yml  # Infinity版 - Bot 2&3
 ├── .env
 ├── .env.example
@@ -467,7 +467,7 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   │   ├── models.both.json.example       # 両方使用
 │   │   ├── openclaw.json.example         # ZAI用ボット設定
 │   │   └── openclaw.openrouter.json.example # OpenRouter用
-│   ├── bot1/
+│   ├── agent1/
 │   │   ├── openclaw.json
 │   │   ├── models.json
 │   │   └── cron/
@@ -484,7 +484,7 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   │       └── jobs.json
 │   └── openclaw.json  # グローバル設定
 └── workspace/
-    ├── bot1/
+    ├── agent1/
     ├── bot2/
     └── bot3/
 ```
@@ -497,8 +497,8 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 
 ```bash
 # ZAI (GLM-4.7) を使用する場合
-cp config/examples/models.json.example config/bot1/models.json
-cp config/examples/openclaw.json.example config/bot1/openclaw.json
+cp config/examples/models.json.example config/agent1/models.json
+cp config/examples/openclaw.json.example config/agent1/openclaw.json
 
 # OpenRouter を使用する場合
 cp config/examples/models.openrouter.json.example config/bot2/models.json
@@ -552,7 +552,7 @@ cp config/examples/openclaw.openrouter.json.example config/bot2/openclaw.json
 #### Standard版
 
 ```bash
-# Bot 1 のみを起動
+# Agent 1 のみを起動
 docker compose up -d
 
 # 全てのボットを起動
@@ -565,10 +565,10 @@ docker compose -f docker-compose.yml -f docker-compose.multi.yml down
 docker compose -f docker-compose.yml -f docker-compose.multi.yml restart
 
 # 特定のボットを再起動
-docker compose -f docker-compose.yml -f docker-compose.multi.yml restart openclaw-bot1
+docker compose -f docker-compose.yml -f docker-compose.multi.yml restart openclaw-agent1
 
 # 特定のボットのログを表示
-docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f openclaw-bot1
+docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f openclaw-agent1
 
 # 全てのログを表示
 docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f
@@ -577,7 +577,7 @@ docker compose -f docker-compose.yml -f docker-compose.multi.yml logs -f
 #### Infinity版
 
 ```bash
-# Bot 1 のみを起動
+# Agent 1 のみを起動
 docker compose -f docker-compose.infinity.yml up -d --build
 
 # 全てのボットを起動
@@ -595,18 +595,18 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 #### Standard版
 
 ```bash
-# bot1のCLIにアクセス
+# agent1のCLIにアクセス
 docker compose --profile cli run --rm openclaw-cli
 
 # CLI経由でDiscordチャンネルを追加
 docker compose --profile cli run --rm openclaw-cli \
-    channels add --channel discord --token "${DISCORD_BOT1_TOKEN}"
+    channels add --channel discord --token "${DISCORD_AGENT1_TOKEN}"
 ```
 
 #### Infinity版
 
 ```bash
-# bot1のInfinity CLIにアクセス
+# agent1のInfinity CLIにアクセス
 docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-cli
 
 # 対話型シェルとして実行
@@ -617,13 +617,13 @@ docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-cli bas
 
 ```bash
 # コンテナ内でコマンド実行
-docker exec -it openclaw-bot1 node dist/index.js config set ...
+docker exec -it openclaw-agent1 node dist/index.js config set ...
 
 # 対話型シェル（Standard版）
-docker exec -it openclaw-bot1 /bin/bash
+docker exec -it openclaw-agent1 /bin/bash
 
 # 対話型シェル（Infinity版）
-docker exec -it openclaw-infinity-bot1 bash
+docker exec -it openclaw-infinity-agent1 bash
 ```
 
 ---
