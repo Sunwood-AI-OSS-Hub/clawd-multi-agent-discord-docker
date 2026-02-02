@@ -24,7 +24,7 @@ services:
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
       - ./config/bot2:/home/agent/.openclaw
-      - ./workspace/bot2:/home/agent/clawd
+      - ./workspace/bot2:/home/agent/.openclaw/workspace
     ports:
       - "18791:18789"
     init: true
@@ -51,7 +51,7 @@ services:
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
       - ./config/bot3:/home/agent/.openclaw
-      - ./workspace/bot3:/home/agent/clawd
+      - ./workspace/bot3:/home/agent/.openclaw/workspace
     ports:
       - "18793:18789"
     init: true

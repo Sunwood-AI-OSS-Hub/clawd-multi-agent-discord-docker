@@ -16,7 +16,7 @@ services:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
     volumes:
       - ./config/bot2:/home/node/.openclaw
-      - ./workspace/bot2:/home/node/clawd
+      - ./workspace/bot2:/home/node/.openclaw/workspace
     ports:
       - "18791:18789"
     init: true
@@ -42,7 +42,7 @@ services:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
     volumes:
       - ./config/bot3:/home/node/.openclaw
-      - ./workspace/bot3:/home/node/clawd
+      - ./workspace/bot3:/home/node/.openclaw/workspace
     ports:
       - "18793:18789"
     init: true

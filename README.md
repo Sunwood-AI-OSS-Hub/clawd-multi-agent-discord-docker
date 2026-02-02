@@ -507,6 +507,17 @@ cp config/examples/models.openrouter.json.example config/bot2/models.json
 cp config/examples/openclaw.openrouter.json.example config/bot2/openclaw.json
 ```
 
+### ボリュームマウント構成
+
+各ボットコンテナでは以下のボリュームマウントが行われます：
+
+| ホストパス | コンテナパス | 説明 |
+|-----------|-------------|------|
+| `./config/bot{N}/` | `/home/node/.openclaw/` | ボットの設定ファイル（モデル、チャンネル等） |
+| `./workspace/bot{N}/` | `/home/node/.openclaw/workspace/` | ワークスペース（スキル、一時ファイル等） |
+
+**ワークスペースの永続化**: `./workspace/` ディレクトリはコンテナの再起動後もデータを保持するためにホスト側にマウントされます。スキルやエージェントが生成したファイルはここに保存されます。
+
 ### 設定オプション
 
 #### openclaw.json
