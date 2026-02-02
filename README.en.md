@@ -415,6 +415,17 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
     └── bot3/
 ```
 
+### Volume Mount Configuration
+
+Each bot container uses the following volume mounts:
+
+| Host Path | Container Path | Description |
+|-----------|----------------|-------------|
+| `./config/bot{N}/` | `/home/node/.openclaw/` | Bot configuration files (models, channels, etc.) |
+| `./workspace/bot{N}/` | `/home/node/.openclaw/workspace/` | Workspace (skills, temporary files, etc.) |
+
+**Workspace Persistence**: The `./workspace/` directory is mounted to the host to persist data across container restarts. Files created by skills and agents are stored here.
+
 ### Configuration Options
 
 #### openclaw.json
