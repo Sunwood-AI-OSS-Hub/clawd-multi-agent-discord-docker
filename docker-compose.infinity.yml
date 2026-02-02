@@ -64,6 +64,23 @@ services:
     networks:
       - infinity-network
 
+  # Browser API Service
+  browser-api:
+    build:
+      context: ./browser-api
+    ports:
+      - "8083:8000"    # API
+      - "5900:5900"    # VNC
+      - "7900:7900"    # noVNC
+    volumes:
+      - ./data/screenshots:/app/screenshots
+      - ./data/chrome-profile:/app/chrome-profile
+    environment:
+      - ALLOWED_ORIGINS=${BROWSER_API_ALLOWED_ORIGINS:-http://localhost:3000}
+    networks:
+      - infinity-network
+    restart: unless-stopped
+
 networks:
   infinity-network:
     driver: bridge

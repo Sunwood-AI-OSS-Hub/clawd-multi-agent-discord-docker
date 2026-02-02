@@ -78,3 +78,6 @@ RELEASE_NOTES.md
 openclaw-aquarium-gateway-token.txt
 clawdbot-aquarium-gateway-token.txt
 docs/
+
+# Browser API data
+data/
