@@ -1,5 +1,5 @@
 # =============================================================================
-# Clawdbot Infinity - Development Environment (Main Bot)
+# OpenClaw Infinity - Development Environment (Main Bot)
 # =============================================================================
 # Features:
 # - agent-browser installed
@@ -8,45 +8,45 @@
 #
 # Usage:
 #   docker compose -f docker-compose.infinity.yml up -d
-#   docker compose -f docker-compose.infinity.yml run --rm clawdbot-infinity-bot1
+#   docker compose -f docker-compose.infinity.yml run --rm openclaw-infinity-bot1
 # =============================================================================
 
 services:
   # Bot 1 - Gateway (Infinity)
-  clawdbot-infinity-bot1:
+  openclaw-infinity-bot1:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: clawdbot-infinity-bot1
+    container_name: openclaw-infinity-bot1
     environment:
       HOME: /home/agent
       TERM: xterm-256color
       PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT1_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT1_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
-      - ./config/bot1:/home/agent/.clawdbot
+      - ./config/bot1:/home/agent/.openclaw
       - ./workspace/bot1:/home/agent/clawd
     ports:
       - "18789:18789"
       - "3001:3000"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway --bind lan"]
+    command: ["sh", "-c", "rm -f /home/agent/.openclaw/*.lock && exec node dist/index.js gateway --bind lan"]
     networks:
       - infinity-network
 
   # CLI for development (Infinity)
-  clawdbot-infinity-cli:
+  openclaw-infinity-cli:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: clawdbot-infinity-cli
+    container_name: openclaw-infinity-cli
     environment:
       HOME: /home/agent
       TERM: xterm-256color
@@ -55,7 +55,7 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
-      - ./config/bot1:/home/agent/.clawdbot
+      - ./config/bot1:/home/agent/.openclaw
       - ./workspace/bot1:/home/agent/clawd
     stdin_open: true
     tty: true

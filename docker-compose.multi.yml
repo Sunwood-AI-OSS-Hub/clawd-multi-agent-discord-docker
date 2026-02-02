@@ -1,54 +1,56 @@
 services:
   # Bot 2 - Gateway
-  clawdbot-bot2:
-    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
-    build:
-      context: ./clawdbot
-      dockerfile: Dockerfile
-    container_name: clawdbot-bot2
+  openclaw-bot2:
+    image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
+    # For local build, uncomment below:
+    # build:
+    #   context: ./openclaw
+    #   dockerfile: Dockerfile
+    container_name: openclaw-bot2
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT2_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT2_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
     volumes:
-      - ./config/bot2:/home/node/.clawdbot
+      - ./config/bot2:/home/node/.openclaw
       - ./workspace/bot2:/home/node/clawd
     ports:
       - "18791:18789"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
+    command: ["sh", "-c", "rm -f /home/node/.openclaw/*.lock && exec node dist/index.js gateway"]
     networks:
-      - clawdbot-network
+      - openclaw-network
 
   # Bot 3 - Gateway
-  clawdbot-bot3:
-    image: ${IMAGE_REGISTRY:-clawdbot}:${IMAGE_TAG:-local}
-    build:
-      context: ./clawdbot
-      dockerfile: Dockerfile
-    container_name: clawdbot-bot3
+  openclaw-bot3:
+    image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
+    # For local build, uncomment below:
+    # build:
+    #   context: ./openclaw
+    #   dockerfile: Dockerfile
+    container_name: openclaw-bot3
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT3_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT3_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
     volumes:
-      - ./config/bot3:/home/node/.clawdbot
+      - ./config/bot3:/home/node/.openclaw
       - ./workspace/bot3:/home/node/clawd
     ports:
       - "18793:18789"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/node/.clawdbot/*.lock && exec node dist/index.js gateway"]
+    command: ["sh", "-c", "rm -f /home/node/.openclaw/*.lock && exec node dist/index.js gateway"]
     networks:
-      - clawdbot-network
+      - openclaw-network
 
 networks:
-  clawdbot-network:
+  openclaw-network:
     driver: bridge

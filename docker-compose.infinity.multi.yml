@@ -1,5 +1,5 @@
 # =============================================================================
-# Clawdbot Infinity - Multi Bot Configuration (Bot 2 & 3)
+# OpenClaw Infinity - Multi Bot Configuration (Bot 2 & 3)
 # =============================================================================
 # Usage:
 #   docker compose -f docker-compose.infinity.multi.yml up -d
@@ -7,56 +7,56 @@
 
 services:
   # Bot 2 - Gateway (Infinity)
-  clawdbot-infinity-bot2:
+  openclaw-infinity-bot2:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: clawdbot-infinity-bot2
+    container_name: openclaw-infinity-bot2
     environment:
       HOME: /home/agent
       TERM: xterm-256color
       PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT2_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT2_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
-      - ./config/bot2:/home/agent/.clawdbot
+      - ./config/bot2:/home/agent/.openclaw
       - ./workspace/bot2:/home/agent/clawd
     ports:
       - "18791:18789"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway --bind lan"]
+    command: ["sh", "-c", "rm -f /home/agent/.openclaw/*.lock && exec node dist/index.js gateway --bind lan"]
     networks:
       - infinity-network
 
   # Bot 3 - Gateway (Infinity)
-  clawdbot-infinity-bot3:
+  openclaw-infinity-bot3:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: clawdbot-infinity-bot3
+    container_name: openclaw-infinity-bot3
     environment:
       HOME: /home/agent
       TERM: xterm-256color
       PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
-      CLAWDBOT_GATEWAY_TOKEN: ${CLAWDBOT_BOT3_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT3_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
-      - ./config/bot3:/home/agent/.clawdbot
+      - ./config/bot3:/home/agent/.openclaw
       - ./workspace/bot3:/home/agent/clawd
     ports:
       - "18793:18789"
     init: true
     restart: unless-stopped
-    command: ["sh", "-c", "rm -f /home/agent/.clawdbot/*.lock && exec node dist/index.js gateway --bind lan"]
+    command: ["sh", "-c", "rm -f /home/agent/.openclaw/*.lock && exec node dist/index.js gateway --bind lan"]
     networks:
       - infinity-network
 

@@ -8,28 +8,28 @@ RUN corepack enable
 
 WORKDIR /app
 
-ARG CLAWDBOT_DOCKER_APT_PACKAGES=""
-RUN if [ -n "$CLAWDBOT_DOCKER_APT_PACKAGES" ]; then \
+ARG OPENCLAW_DOCKER_APT_PACKAGES=""
+RUN if [ -n "$OPENCLAW_DOCKER_APT_PACKAGES" ]; then \
       apt-get update && \
-      DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $CLAWDBOT_DOCKER_APT_PACKAGES && \
+      DEBIAN_FRONTEND=noninteractive apt-get install -y --no-install-recommends $OPENCLAW_DOCKER_APT_PACKAGES && \
       apt-get clean && \
       rm -rf /var/lib/apt/lists/* /var/cache/apt/archives/*; \
     fi
 
-COPY clawdbot/package.json clawdbot/pnpm-lock.yaml clawdbot/pnpm-workspace.yaml clawdbot/.npmrc ./
-COPY clawdbot/ui/package.json ./ui/package.json
-COPY clawdbot/patches ./patches
-COPY clawdbot/scripts ./scripts
+COPY openclaw/package.json openclaw/pnpm-lock.yaml openclaw/pnpm-workspace.yaml openclaw/.npmrc ./
+COPY openclaw/ui/package.json ./ui/package.json
+COPY openclaw/patches ./patches
+COPY openclaw/scripts ./scripts
 
 # Use HTTPS for git protocol to avoid local .git dependency
 RUN echo "git-protocol=https" >> .npmrc
 
 RUN pnpm install --frozen-lockfile
 
-COPY clawdbot/. .
+COPY openclaw/. .
 RUN pnpm build
 # Force pnpm for UI build (Bun may fail on ARM/Synology architectures)
-ENV CLAWDBOT_PREFER_PNPM=1
+ENV OPENCLAW_PREFER_PNPM=1
 RUN pnpm ui:install
 RUN pnpm ui:build
 
