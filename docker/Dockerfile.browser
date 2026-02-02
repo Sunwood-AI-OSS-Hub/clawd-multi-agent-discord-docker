@@ -1,3 +1,11 @@
+# ⚠️  EXPERIMENTAL IMAGE - FOR DEVELOPMENT/RESEARCH ONLY ⚠️
+# This image is designed for agent experimentation and development.
+# Security considerations are secondary to agent flexibility and freedom.
+# DO NOT use this in production environments or for security-sensitive workloads.
+#
+# NOTE: The agent-browser package (npm) is NOT affected by CVE-2025-47241.
+# That CVE affects the 'browser-use' Python package, which is a different project.
+
 # Base image from the OpenClaw base build
 FROM ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base:latest
 

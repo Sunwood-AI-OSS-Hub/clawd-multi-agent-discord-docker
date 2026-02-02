@@ -1,6 +1,34 @@
-# ⚠️  INFINITY IMAGE - DEVELOPMENT/TESTING ONLY ⚠️
-# This image includes a non-root user with passwordless sudo access.
-# DO NOT use this in production environments.
+# ⚠️  INFINITY IMAGE - EXPERIMENTAL/DEVELOPMENT ONLY ⚠️
+# ⚠️  AGENT FREEDOM OVER SECURITY - NOT FOR PRODUCTION ⚠️
+#
+# This is an EXPERIMENTAL image designed to give AI agents maximum freedom
+# for exploration and learning. Security restrictions are intentionally relaxed.
+#
+# Security characteristics (INTENTIONAL for agent experimentation):
+# - Non-root user with PASSWORDLESS sudo access (agent user has de facto root)
+# - Permissive file permissions (777 on /home/agent, 775 on /home/node)
+# - Unrestricted script execution via curl | bash
+# - Unpinned repository branches (main branch)
+#
+# These configurations are DELIBERATE trade-offs that prioritize:
+#   1. Agent autonomy and learning capability
+#   2. Development flexibility
+#   3. Rapid prototyping
+#
+# OVER:
+#   1. Production security hardening
+#   2. Least-privilege access principles
+#   3. Reproducible builds
+#
+# ⚠️  DO NOT USE THIS IMAGE FOR:
+#    - Production deployments
+#    - Security-sensitive workloads
+#    - Multi-tenant environments
+#    - Processing untrusted input
+#    - Any system where security matters more than agent freedom
+#
+# NOTE: The agent-browser package (npm) is NOT affected by CVE-2025-47241.
+# That CVE affects the 'browser-use' Python package, which is a different project.
 
 # Base image from the OpenClaw base build
 FROM ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base:latest
