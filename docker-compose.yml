@@ -1,6 +1,8 @@
 services:
   # Bot 1 - Gateway (Main)
   openclaw-bot1:
+    # NOTE: Using 'latest' tag for convenience. For production, pin to specific version:
+    #   IMAGE_TAG=v0.2.0  # Example: Pin to specific release
     image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
     # For local build, uncomment below:
     # build:
@@ -28,6 +30,8 @@ services:
 
   # CLI for setup
   openclaw-cli:
+    # NOTE: Using 'latest' tag for convenience. For production, pin to specific version:
+    #   IMAGE_TAG=v0.2.0  # Example: Pin to specific release
     image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
     # For local build, uncomment below:
     # build:
