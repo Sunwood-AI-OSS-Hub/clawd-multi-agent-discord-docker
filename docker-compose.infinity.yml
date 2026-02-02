@@ -30,7 +30,7 @@ services:
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
       - ./config/bot1:/home/agent/.openclaw
-      - ./workspace/bot1:/home/agent/clawd
+      - ./workspace/bot1:/home/agent/.openclaw/workspace
     ports:
       - "18789:18789"
       - "3001:3000"
@@ -56,7 +56,7 @@ services:
       GITHUB_TOKEN: ${GH_PAT_BOT1}
     volumes:
       - ./config/bot1:/home/agent/.openclaw
-      - ./workspace/bot1:/home/agent/clawd
+      - ./workspace/bot1:/home/agent/.openclaw/workspace
     stdin_open: true
     tty: true
     init: true
