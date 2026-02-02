@@ -18,8 +18,7 @@ services:
       DISCORD_BOT_TOKEN: ${DISCORD_BOT1_TOKEN}
     volumes:
       - ./config/bot1:/home/node/.openclaw
-      - ./workspace/bot1:/home/node/clawd
-      - ./workspace/bot1/skills:/app/skills:ro
+      - ./workspace/bot1:/home/node/.openclaw/workspace
     ports:
       - "18789:18789"
     init: true
@@ -46,7 +45,7 @@ services:
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
     volumes:
       - ./config/bot1:/home/node/.openclaw
-      - ./workspace/bot1:/home/node/clawd
+      - ./workspace/bot1:/home/node/.openclaw/workspace
     stdin_open: true
     tty: true
     init: true
