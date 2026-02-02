@@ -1,0 +1,198 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <!-- Animated Text Gradient - Blue Flow Theme -->
+    <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#00d4ff">
+        <animate attributeName="stop-color" values="#00d4ff;#00a8ff;#00d4ff;#06c2ff;#00d4ff" dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#0099ff">
+        <animate attributeName="stop-color" values="#0099ff;#0077ff;#0099ff;#0088ff;#0099ff" dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#0066ff">
+        <animate attributeName="stop-color" values="#0066ff;#0055ff;#0066ff;#0077ff;#0066ff" dur="5s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Gradient Background - Deep Blue Ocean -->
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#0a1628">
+        <animate attributeName="stop-color" values="#0a1628;#0d1a3a;#0a1628;#0f2847;#0a1628" dur="12s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#1a3a5c">
+        <animate attributeName="stop-color" values="#1a3a5c;#0f2847;#1a3a5c;#1a4a6c;#1a3a5c" dur="12s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#0d2847">
+        <animate attributeName="stop-color" values="#0d2847;#1a3a5c;#0d2847;#0a1628;#0d2847" dur="12s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Wave Pattern -->
+    <pattern id="wave-pattern" x="0" y="0" width="1200" height="60" patternUnits="userSpaceOnUse">
+      <path d="M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30" fill="none" stroke="rgba(0,212,255,0.05)" stroke-width="2">
+        <animate attributeName="d" values="M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30;M0,30 Q150,60 300,30 T600,30 T900,30 T1200,30;M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30" dur="8s" repeatCount="indefinite"/>
+      </path>
+    </pattern>
+
+    <!-- Glow Effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur">
+        <animate attributeName="stdDeviation" values="4;7;5;8;4" dur="4s" repeatCount="indefinite"/>
+      </feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Flow Wave Effect -->
+    <filter id="flow-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+  </defs>
+
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes flow {
+      0% { transform: translateX(-5px); }
+      50% { transform: translateX(5px); }
+      100% { transform: translateX(-5px); }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+    @keyframes spin {
+      from { transform-origin: center; transform: rotate(0deg); }
+      to { transform-origin: center; transform: rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes ripple {
+      0% { r: 2; opacity: 1; }
+      100% { r: 15; opacity: 0; }
+    }
+    @keyframes wave-motion {
+      0%, 100% { transform: translateY(0); }
+      25% { transform: translateY(-4px); }
+      75% { transform: translateY(4px); }
+    }
+    @keyframes bubble-rise {
+      0% { cy: 280; opacity: 0; }
+      10% { opacity: 0.8; }
+      90% { opacity: 0.8; }
+      100% { cy: 20; opacity: 0; }
+    }
+    .main-text { animation: float 4s ease-in-out infinite; }
+    .subtitle { animation: fadeIn 1.2s ease-out forwards; }
+    .bracket-left { animation: pulse 2s ease-in-out infinite; }
+    .bracket-right { animation: pulse 2s ease-in-out infinite 0.5s; }
+    .circle-spin { animation: spin 30s linear infinite; transform-origin: center; }
+    .ripple-effect { animation: ripple 2s ease-out infinite; }
+    .release-char { animation: wave-motion 2.5s ease-in-out infinite; }
+    .bubble { animation: bubble-rise linear infinite; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bg-gradient)"/>
+  <rect y="100" width="1200" height="100" fill="url(#wave-pattern)"/>
+
+  <!-- Flow Wave Lines -->
+  <g fill="none" stroke="rgba(0,212,255,0.1)" stroke-width="1.5">
+    <path d="M0,120 Q200,90 400,120 T800,120 T1200,120">
+      <animate attributeName="d" values="M0,120 Q200,90 400,120 T800,120 T1200,120;M0,120 Q200,150 400,120 T800,120 T1200,120;M0,120 Q200,90 400,120 T800,120 T1200,120" dur="6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,180 Q200,150 400,180 T800,180 T1200,180" opacity="0.7">
+      <animate attributeName="d" values="M0,180 Q200,150 400,180 T800,180 T1200,180;M0,180 Q200,210 400,180 T800,180 T1200,180;M0,180 Q200,150 400,180 T800,180 T1200,180" dur="7s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Decorative Circles -->
+  <circle cx="120" cy="150" r="70" fill="none" stroke="rgba(0,212,255,0.12)" stroke-width="2" class="circle-spin"/>
+  <circle cx="1080" cy="150" r="90" fill="none" stroke="rgba(0,153,255,0.12)" stroke-width="2" class="circle-spin" style="animation-direction: reverse; animation-duration: 35s;"/>
+  <circle cx="600" cy="150" r="180" fill="none" stroke="rgba(0,102,255,0.04)" stroke-width="1" class="circle-spin" style="animation-duration: 45s;"/>
+
+  <!-- Bubbles Rising -->
+  <g fill="rgba(0,212,255,0.3)">
+    <circle cx="150" cy="0" r="3" class="bubble" style="animation-duration: 8s; animation-delay: 0s;">
+      <animate attributeName="opacity" values="0;0.6;0" dur="8s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="300" cy="0" r="2" class="bubble" style="animation-duration: 10s; animation-delay: 2s;">
+      <animate attributeName="opacity" values="0;0.5;0" dur="10s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="450" cy="0" r="4" class="bubble" style="animation-duration: 12s; animation-delay: 4s;">
+      <animate attributeName="opacity" values="0;0.7;0" dur="12s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="600" cy="0" r="2.5" class="bubble" style="animation-duration: 9s; animation-delay: 1s;">
+      <animate attributeName="opacity" values="0;0.5;0" dur="9s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="750" cy="0" r="3.5" class="bubble" style="animation-duration: 11s; animation-delay: 3s;">
+      <animate attributeName="opacity" values="0;0.6;0" dur="11s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="900" cy="0" r="2" class="bubble" style="animation-duration: 8.5s; animation-delay: 5s;">
+      <animate attributeName="opacity" values="0;0.4;0" dur="8.5s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1050" cy="0" r="3" class="bubble" style="animation-duration: 10.5s; animation-delay: 2.5s;">
+      <animate attributeName="opacity" values="0;0.6;0" dur="10.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Flow Particles -->
+  <g fill="rgba(0,212,255,0.5)">
+    <circle cx="200" cy="150" r="2" opacity="0.7">
+      <animate attributeName="cx" values="200;1000;200" dur="15s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.7;0.2;0.7" dur="15s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="400" cy="170" r="1.5" opacity="0.5">
+      <animate attributeName="cx" values="400;1100;400" dur="18s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.1;0.5" dur="18s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Code Brackets Left -->
+  <g fill="none" stroke="rgba(0,212,255,0.35)" stroke-width="3" stroke-linecap="round" class="bracket-left">
+    <path d="M 190 115 Q 170 150 190 185"/>
+    <path d="M 170 95 Q 140 150 170 205"/>
+  </g>
+
+  <!-- Code Brackets Right -->
+  <g fill="none" stroke="rgba(0,153,255,0.35)" stroke-width="3" stroke-linecap="round" class="bracket-right">
+    <path d="M 1010 115 Q 1030 150 1010 185"/>
+    <path d="M 1030 95 Q 1060 150 1030 205"/>
+  </g>
+
+  <!-- Ripple Effects Around Title -->
+  <g fill="none" stroke="rgba(0,212,255,0.2)" stroke-width="1">
+    <circle cx="450" cy="150" r="40" class="ripple-effect" style="animation-delay: 0s;"/>
+    <circle cx="450" cy="150" r="40" class="ripple-effect" style="animation-delay: 0.5s;"/>
+    <circle cx="750" cy="150" r="40" class="ripple-effect" style="animation-delay: 1s;"/>
+    <circle cx="750" cy="150" r="40" class="ripple-effect" style="animation-delay: 1.5s;"/>
+  </g>
+
+  <!-- Main Text -->
+  <text x="600" y="175" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="75" font-weight="900" fill="url(#text-gradient)" filter="url(#glow)" letter-spacing="5" class="main-text">OpenClaw <tspan fill="rgba(255,255,255,0.65)" font-size="45">v0.2.1</tspan></text>
+
+  <!-- Release Text -->
+  <text x="600" y="215" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="rgba(255,255,255,0.45)" letter-spacing="7" class="subtitle">
+    <tspan class="release-char" style="animation-delay: 0s">R</tspan><tspan class="release-char" style="animation-delay: 0.1s">E</tspan><tspan class="release-char" style="animation-delay: 0.2s">L</tspan><tspan class="release-char" style="animation-delay: 0.3s">E</tspan><tspan class="release-char" style="animation-delay: 0.4s">A</tspan><tspan class="release-char" style="animation-delay: 0.5s">S</tspan><tspan class="release-char" style="animation-delay: 0.6s">E</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="245" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="rgba(255,255,255,0.35)" letter-spacing="3" class="subtitle">Rename Refinement</text>
+
+  <!-- Decorative Dots -->
+  <circle cx="290" cy="270" r="3" fill="#00d4ff" class="ripple-effect" style="animation: ripple 1.5s ease-in-out infinite;"/>
+  <circle cx="315" cy="270" r="2" fill="#0099ff" class="ripple-effect" style="animation: ripple 1.5s ease-in-out infinite 0.3s;"/>
+  <circle cx="335" cy="270" r="1.5" fill="#0066ff" class="ripple-effect" style="animation: ripple 1.5s ease-in-out infinite 0.6s;"/>
+  <circle cx="865" cy="270" r="1.5" fill="#0066ff" class="ripple-effect" style="animation: ripple 1.5s ease-in-out infinite 0.9s;"/>
+  <circle cx="885" cy="270" r="2" fill="#0099ff" class="ripple-effect" style="animation: ripple 1.5s ease-in-out infinite 1.2s;"/>
+  <circle cx="910" cy="270" r="3" fill="#00d4ff" class="ripple-effect" style="animation: ripple 1.5s ease-in-out infinite 1.5s;"/>
+</svg>
