@@ -18,9 +18,6 @@ config/**/*llm-secrets.sh
 # workspace（別のGitリポジトリ）
 workspace/
 
-# openclaw（別のGitリポジトリ）
-openclaw/
-
 # Python
 __pycache__/
 *.py[cod]
@@ -83,3 +80,4 @@ openclaw-aquarium-gateway-token.txt
 
 docs/
 openclaw-aquarium-gateway-token.txt
+clawdbot-aquarium-gateway-token.txt
