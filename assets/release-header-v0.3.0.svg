@@ -1,0 +1,251 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 300" width="1200" height="300">
+  <defs>
+    <!-- Animated Text Gradient - Purple Integration Theme -->
+    <linearGradient id="text-gradient" x1="0%" y1="0%" x2="100%" y2="0%">
+      <stop offset="0%" style="stop-color:#a78bfa">
+        <animate attributeName="stop-color" values="#a78bfa;#c4b5fd;#a78bfa;#b794f6;#a78bfa" dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#8b5cf6">
+        <animate attributeName="stop-color" values="#8b5cf6;#7c3aed;#8b5cf6;#9333ea;#8b5cf6" dur="5s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#7c3aed">
+        <animate attributeName="stop-color" values="#7c3aed;#6d28d9;#7c3aed;#8b5cf6;#7c3aed" dur="5s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Gradient Background - Deep Purple Cosmos -->
+    <linearGradient id="bg-gradient" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" style="stop-color:#1a0a2e">
+        <animate attributeName="stop-color" values="#1a0a2e;#2d1b4e;#1a0a2e;#3d1e5e;#1a0a2e" dur="12s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="50%" style="stop-color:#2d1b4e">
+        <animate attributeName="stop-color" values="#2d1b4e;#3d1e5e;#2d1b4e;#4a2c6a;#2d1b4e" dur="12s" repeatCount="indefinite"/>
+      </stop>
+      <stop offset="100%" style="stop-color:#3d1e5e">
+        <animate attributeName="stop-color" values="#3d1e5e;#2d1b4e;#3d1e5e;#1a0a2e;#3d1e5e" dur="12s" repeatCount="indefinite"/>
+      </stop>
+    </linearGradient>
+
+    <!-- Wave Pattern - Integration Flow -->
+    <pattern id="wave-pattern" x="0" y="0" width="1200" height="60" patternUnits="userSpaceOnUse">
+      <path d="M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30" fill="none" stroke="rgba(167,139,250,0.05)" stroke-width="2">
+        <animate attributeName="d" values="M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30;M0,30 Q150,60 300,30 T600,30 T900,30 T1200,30;M0,30 Q150,0 300,30 T600,30 T900,30 T1200,30" dur="8s" repeatCount="indefinite"/>
+      </path>
+    </pattern>
+
+    <!-- Glow Effect -->
+    <filter id="glow" x="-50%" y="-50%" width="200%" height="200%">
+      <feGaussianBlur stdDeviation="4" result="coloredBlur">
+        <animate attributeName="stdDeviation" values="4;7;5;8;4" dur="4s" repeatCount="indefinite"/>
+      </feGaussianBlur>
+      <feMerge>
+        <feMergeNode in="coloredBlur"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Integration Pulse Effect -->
+    <filter id="integration-glow" x="-100%" y="-100%" width="300%" height="300%">
+      <feGaussianBlur stdDeviation="3" result="glow"/>
+      <feMerge>
+        <feMergeNode in="glow"/>
+        <feMergeNode in="SourceGraphic"/>
+      </feMerge>
+    </filter>
+
+    <!-- Particle Convergence Gradient -->
+    <radialGradient id="convergence-gradient" cx="50%" cy="50%" r="50%">
+      <stop offset="0%" style="stop-color:#a78bfa;stop-opacity:0.6"/>
+      <stop offset="100%" style="stop-color:#7c3aed;stop-opacity:0"/>
+    </radialGradient>
+  </defs>
+
+  <style>
+    @keyframes float {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-12px); }
+    }
+    @keyframes converge {
+      0% { transform: translateX(-8px); opacity: 0.3; }
+      50% { transform: translateX(0px); opacity: 0.8; }
+      100% { transform: translateX(8px); opacity: 0.3; }
+    }
+    @keyframes pulse {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 0.8; }
+    }
+    @keyframes spin {
+      from { transform-origin: center; transform: rotate(0deg); }
+      to { transform-origin: center; transform: rotate(360deg); }
+    }
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(20px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes converge-pulse {
+      0% { r: 2; opacity: 1; }
+      50% { r: 8; opacity: 0.6; }
+      100% { r: 2; opacity: 1; }
+    }
+    @keyframes wave-motion {
+      0%, 100% { transform: translateY(0); }
+      25% { transform: translateY(-4px); }
+      75% { transform: translateY(4px); }
+    }
+    @keyframes particle-float {
+      0% { transform: translate(0, 0); opacity: 0; }
+      20% { opacity: 0.8; }
+      80% { opacity: 0.8; }
+      100% { transform: translate(var(--tx), var(--ty)); opacity: 0; }
+    }
+    @keyframes orbit {
+      from { transform-origin: 600px 150px; transform: rotate(0deg) translateX(var(--orbit-radius)) rotate(0deg); }
+      to { transform-origin: 600px 150px; transform: rotate(360deg) translateX(var(--orbit-radius)) rotate(-360deg); }
+    }
+    @keyframes merge {
+      0%, 100% { transform: scale(1); opacity: 0.4; }
+      50% { transform: scale(1.3); opacity: 0.8; }
+    }
+    .main-text { animation: float 4s ease-in-out infinite; }
+    .subtitle { animation: fadeIn 1.2s ease-out forwards; }
+    .bracket-left { animation: pulse 2s ease-in-out infinite; }
+    .bracket-right { animation: pulse 2s ease-in-out infinite 0.5s; }
+    .circle-spin { animation: spin 30s linear infinite; transform-origin: center; }
+    .converge-pulse { animation: converge-pulse 2s ease-in-out infinite; }
+    .release-char { animation: wave-motion 2.5s ease-in-out infinite; }
+    .particle { animation: particle-float linear infinite; }
+    .orbit-particle { animation: orbit 20s linear infinite; }
+    .merge-orb { animation: merge 3s ease-in-out infinite; }
+  </style>
+
+  <!-- Background -->
+  <rect width="1200" height="300" fill="url(#bg-gradient)"/>
+  <rect y="100" width="1200" height="100" fill="url(#wave-pattern)"/>
+
+  <!-- Central Convergence Point -->
+  <circle cx="600" cy="150" r="100" fill="url(#convergence-gradient)" opacity="0.3"/>
+
+  <!-- Integration Wave Lines -->
+  <g fill="none" stroke="rgba(167,139,250,0.1)" stroke-width="1.5">
+    <path d="M0,120 Q200,90 400,120 T800,120 T1200,120">
+      <animate attributeName="d" values="M0,120 Q200,90 400,120 T800,120 T1200,120;M0,120 Q200,150 400,120 T800,120 T1200,120;M0,120 Q200,90 400,120 T800,120 T1200,120" dur="6s" repeatCount="indefinite"/>
+    </path>
+    <path d="M0,180 Q200,150 400,180 T800,180 T1200,180" opacity="0.7">
+      <animate attributeName="d" values="M0,180 Q200,150 400,180 T800,180 T1200,180;M0,180 Q200,210 400,180 T800,180 T1200,180;M0,180 Q200,150 400,180 T800,180 T1200,180" dur="7s" repeatCount="indefinite"/>
+    </path>
+  </g>
+
+  <!-- Converging Lines to Center -->
+  <g stroke="rgba(139,92,246,0.15)" stroke-width="1" fill="none">
+    <path d="M0,0 L600,150">
+      <animate attributeName="stroke-dasharray" values="0,1000;500,500;0,1000" dur="8s" repeatCount="indefinite"/>
+    </path>
+    <path d="M1200,0 L600,150">
+      <animate attributeName="stroke-dasharray" values="0,1000;500,500;0,1000" dur="8s" repeatCount="indefinite" begin="2s"/>
+    </path>
+    <path d="M0,300 L600,150">
+      <animate attributeName="stroke-dasharray" values="0,1000;500,500;0,1000" dur="8s" repeatCount="indefinite" begin="4s"/>
+    </path>
+    <path d="M1200,300 L600,150">
+      <animate attributeName="stroke-dasharray" values="0,1000;500,500;0,1000" dur="8s" repeatCount="indefinite" begin="6s"/>
+    </path>
+  </g>
+
+  <!-- Decorative Circles -->
+  <circle cx="120" cy="150" r="70" fill="none" stroke="rgba(167,139,250,0.12)" stroke-width="2" class="circle-spin"/>
+  <circle cx="1080" cy="150" r="90" fill="none" stroke="rgba(139,92,246,0.12)" stroke-width="2" class="circle-spin" style="animation-direction: reverse; animation-duration: 35s;"/>
+  <circle cx="600" cy="150" r="180" fill="none" stroke="rgba(124,58,237,0.04)" stroke-width="1" class="circle-spin" style="animation-duration: 45s;"/>
+
+  <!-- Orbiting Particles -->
+  <g fill="#a78bfa" class="orbit-particle" style="--orbit-radius: 250px;">
+    <circle r="3" opacity="0.7">
+      <animate attributeName="opacity" values="0.4;0.9;0.4" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+  <g fill="#8b5cf6" class="orbit-particle" style="--orbit-radius: 250px; animation-delay: -10s;">
+    <circle r="2.5" opacity="0.6">
+      <animate attributeName="opacity" values="0.3;0.8;0.3" dur="4s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Merging Orbs (Integration Theme) -->
+  <circle cx="400" cy="150" r="25" fill="rgba(167,139,250,0.15)" class="merge-orb" style="animation-delay: 0s;">
+    <animate attributeName="cx" values="400;450;400" dur="6s" repeatCount="indefinite"/>
+  </circle>
+  <circle cx="800" cy="150" r="25" fill="rgba(139,92,246,0.15)" class="merge-orb" style="animation-delay: 1.5s;">
+    <animate attributeName="cx" values="800;750;800" dur="6s" repeatCount="indefinite"/>
+  </circle>
+
+  <!-- Convergence Particles -->
+  <g fill="rgba(167,139,250,0.6)">
+    <circle cx="100" cy="50" r="2" class="particle" style="--tx: 500px; --ty: 100px; animation-duration: 10s; animation-delay: 0s;">
+      <animate attributeName="opacity" values="0;0.8;0" dur="10s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1100" cy="50" r="2" class="particle" style="--tx: -500px; --ty: 100px; animation-duration: 12s; animation-delay: 2s;">
+      <animate attributeName="opacity" values="0;0.7;0" dur="12s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="100" cy="250" r="2.5" class="particle" style="--tx: 500px; --ty: -100px; animation-duration: 11s; animation-delay: 4s;">
+      <animate attributeName="opacity" values="0;0.6;0" dur="11s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1100" cy="250" r="2.5" class="particle" style="--tx: -500px; --ty: -100px; animation-duration: 13s; animation-delay: 1s;">
+      <animate attributeName="opacity" values="0;0.8;0" dur="13s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="200" cy="150" r="2" class="particle" style="--tx: 400px; --ty: 0px; animation-duration: 9s; animation-delay: 3s;">
+      <animate attributeName="opacity" values="0;0.5;0" dur="9s" repeatCount="indefinite"/>
+    </circle>
+    <circle cx="1000" cy="150" r="2" class="particle" style="--tx: -400px; --ty: 0px; animation-duration: 10.5s; animation-delay: 5s;">
+      <animate attributeName="opacity" values="0;0.7;0" dur="10.5s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Code Brackets Left -->
+  <g fill="none" stroke="rgba(167,139,250,0.35)" stroke-width="3" stroke-linecap="round" class="bracket-left">
+    <path d="M 190 115 Q 170 150 190 185"/>
+    <path d="M 170 95 Q 140 150 170 205"/>
+  </g>
+
+  <!-- Code Brackets Right -->
+  <g fill="none" stroke="rgba(139,92,246,0.35)" stroke-width="3" stroke-linecap="round" class="bracket-right">
+    <path d="M 1010 115 Q 1030 150 1010 185"/>
+    <path d="M 1030 95 Q 1060 150 1030 205"/>
+  </g>
+
+  <!-- Convergence Pulse Effects Around Title -->
+  <g fill="none" stroke="rgba(167,139,250,0.2)" stroke-width="1">
+    <circle cx="450" cy="150" r="40" class="converge-pulse" style="animation-delay: 0s;"/>
+    <circle cx="450" cy="150" r="40" class="converge-pulse" style="animation-delay: 0.5s;"/>
+    <circle cx="750" cy="150" r="40" class="converge-pulse" style="animation-delay: 1s;"/>
+    <circle cx="750" cy="150" r="40" class="converge-pulse" style="animation-delay: 1.5s;"/>
+  </g>
+
+  <!-- Central Integration Symbol -->
+  <g transform="translate(600, 150)" opacity="0.4">
+    <circle r="8" fill="none" stroke="rgba(167,139,250,0.3)" stroke-width="1.5">
+      <animate attributeName="r" values="8;12;8" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="stroke-width" values="1.5;0.5;1.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+    <circle r="4" fill="rgba(139,92,246,0.5)">
+      <animate attributeName="r" values="4;6;4" dur="3s" repeatCount="indefinite"/>
+      <animate attributeName="opacity" values="0.5;0.8;0.5" dur="3s" repeatCount="indefinite"/>
+    </circle>
+  </g>
+
+  <!-- Main Text -->
+  <text x="600" y="175" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="75" font-weight="900" fill="url(#text-gradient)" filter="url(#glow)" letter-spacing="5" class="main-text">cbot <tspan fill="rgba(255,255,255,0.65)" font-size="45">v0.3.0</tspan></text>
+
+  <!-- Release Text -->
+  <text x="600" y="215" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="15" font-weight="400" fill="rgba(255,255,255,0.45)" letter-spacing="7" class="subtitle">
+    <tspan class="release-char" style="animation-delay: 0s">R</tspan><tspan class="release-char" style="animation-delay: 0.1s">E</tspan><tspan class="release-char" style="animation-delay: 0.2s">L</tspan><tspan class="release-char" style="animation-delay: 0.3s">E</tspan><tspan class="release-char" style="animation-delay: 0.4s">A</tspan><tspan class="release-char" style="animation-delay: 0.5s">S</tspan><tspan class="release-char" style="animation-delay: 0.6s">E</tspan>
+  </text>
+
+  <!-- Subtitle -->
+  <text x="600" y="245" text-anchor="middle" font-family="'Segoe UI', Roboto, Helvetica, Arial, sans-serif" font-size="13" font-weight="400" fill="rgba(255,255,255,0.35)" letter-spacing="3" class="subtitle">Agent Integration &amp; Browser API</text>
+
+  <!-- Decorative Dots -->
+  <circle cx="290" cy="270" r="3" fill="#a78bfa" class="converge-pulse" style="animation: converge-pulse 1.5s ease-in-out infinite;"/>
+  <circle cx="315" cy="270" r="2" fill="#8b5cf6" class="converge-pulse" style="animation: converge-pulse 1.5s ease-in-out infinite 0.3s;"/>
+  <circle cx="335" cy="270" r="1.5" fill="#7c3aed" class="converge-pulse" style="animation: converge-pulse 1.5s ease-in-out infinite 0.6s;"/>
+  <circle cx="865" cy="270" r="1.5" fill="#7c3aed" class="converge-pulse" style="animation: converge-pulse 1.5s ease-in-out infinite 0.9s;"/>
+  <circle cx="885" cy="270" r="2" fill="#8b5cf6" class="converge-pulse" style="animation: converge-pulse 1.5s ease-in-out infinite 1.2s;"/>
+  <circle cx="910" cy="270" r="3" fill="#a78bfa" class="converge-pulse" style="animation: converge-pulse 1.5s ease-in-out infinite 1.5s;"/>
+</svg>
