@@ -43,8 +43,8 @@ MultimediaOS-MUGEN/
 │   └── skills/           # スキル統合先
 ├── workspace/
 │   ├── agent1/
-│   ├── bot2/
-│   └── bot3/
+│   ├── agent2/
+│   └── agent3/
 └── outputs/              # 新規作成：マルチメディア出力用
     ├── images/
     │   ├── generated/
