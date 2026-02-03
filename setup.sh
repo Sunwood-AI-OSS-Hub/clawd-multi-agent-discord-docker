@@ -375,24 +375,28 @@ if [ ! -d "$WORKSPACE_DIR/.git" ]; then
                 fi
             else
                 echo "⚠️  GitHub repository creation failed. Creating template remote config..."
+                TEMPLATE_REMOTE_URL="https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
+                
                 # Check if remote already exists
                 EXISTING_REMOTE=$(git remote get-url origin 2>/dev/null || echo "")
                 if [ -z "$EXISTING_REMOTE" ]; then
                     # No remote exists, add new one
-                    git remote add origin "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
+                    git remote add origin "$TEMPLATE_REMOTE_URL"
                     echo "   Template remote added to git config"
-                elif [ "$EXISTING_REMOTE" != "https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git" ]; then
-                    # Remote exists with different URL
-                    echo "   ℹ️  Remote 'origin' already exists with URL: $EXISTING_REMOTE"
-                    echo "   Keeping existing remote URL. To change it, run:"
+                    echo "   Please update the remote URL with:"
                     echo "   cd $WORKSPACE_DIR && git remote set-url origin <your-repo-url>"
+                    echo "   Then push: git push -u origin main"
+                elif [ "$EXISTING_REMOTE" != "$TEMPLATE_REMOTE_URL" ]; then
+                    # Remote exists with different URL - preserve it
+                    echo "   ℹ️  Remote 'origin' already exists with URL: $EXISTING_REMOTE"
+                    echo "   Keeping existing remote URL."
                 else
                     # Remote already has the template URL
                     echo "   Template remote already configured"
+                    echo "   Please update the remote URL with:"
+                    echo "   cd $WORKSPACE_DIR && git remote set-url origin <your-repo-url>"
+                    echo "   Then push: git push -u origin main"
                 fi
-                echo "   Please update the remote URL with:"
-                echo "   cd $WORKSPACE_DIR && git remote set-url origin https://github.com/YOUR_USERNAME/YOUR_REPO_NAME.git"
-                echo "   Then push: git push -u origin main"
             fi
         else
             echo "⚠️  GitHub CLI (gh) is not authenticated. Skipping remote setup."
