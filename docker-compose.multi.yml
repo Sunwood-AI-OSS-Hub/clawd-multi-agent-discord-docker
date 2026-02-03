@@ -1,22 +1,22 @@
 services:
-  # Bot 2 - Gateway
-  openclaw-bot2:
+  # Agent 2 - Gateway
+  openclaw-agent2:
     image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
     # For local build, uncomment below:
     # build:
     #   context: ./openclaw
     #   dockerfile: Dockerfile
-    container_name: openclaw-bot2
+    container_name: openclaw-agent2
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT2_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_AGENT2_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
+      DISCORD_BOT_TOKEN: ${DISCORD_AGENT2_TOKEN}
     volumes:
-      - ./config/bot2:/home/node/.openclaw
-      - ./workspace/bot2:/home/node/.openclaw/workspace
+      - ./config/agent2:/home/node/.openclaw
+      - ./workspace/agent2:/home/node/.openclaw/workspace
     ports:
       - "18791:18789"
     init: true
@@ -25,24 +25,24 @@ services:
     networks:
       - openclaw-network
 
-  # Bot 3 - Gateway
-  openclaw-bot3:
+  # Agent 3 - Gateway
+  openclaw-agent3:
     image: ${IMAGE_REGISTRY:-ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-base}:${IMAGE_TAG:-latest}
     # For local build, uncomment below:
     # build:
     #   context: ./openclaw
     #   dockerfile: Dockerfile
-    container_name: openclaw-bot3
+    container_name: openclaw-agent3
     environment:
       HOME: /home/node
       TERM: xterm-256color
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT3_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_AGENT3_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
+      DISCORD_BOT_TOKEN: ${DISCORD_AGENT3_TOKEN}
     volumes:
-      - ./config/bot3:/home/node/.openclaw
-      - ./workspace/bot3:/home/node/.openclaw/workspace
+      - ./config/agent3:/home/node/.openclaw
+      - ./workspace/agent3:/home/node/.openclaw/workspace
     ports:
       - "18793:18789"
     init: true

@@ -14,10 +14,10 @@ config/**/*.bak
 config/**/update-check.json
 config/**/*llm-secrets.sh
 
-# Agent/Bot configurations (exclude user configs, but keep examples)
+# Agent configurations (exclude user configs, but keep examples)
 config/agent1/
-config/bot2/
-config/bot3/
+config/agent2/
+config/agent3/
 !config/examples/
 
 # workspace（別のGitリポジトリ）

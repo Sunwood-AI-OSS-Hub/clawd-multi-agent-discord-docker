@@ -58,7 +58,7 @@ GLM-4.7 / OpenRouter APIキーを共有しつつ、各ボットは独立した�
 ├─────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
 │  │  openclaw-   │  │  openclaw-   │  │  openclaw-   │      │
-│  │    agent1      │  │    bot2      │  │    bot3      │      │
+│  │    agent1      │  │    agent2      │  │    agent3      │      │
 │  │  (CL1-Kuroha)│  │  (CL2-Reika) │  │ (CL3-Sentinel)│     │
 │  │              │  │              │  │              │      │
 │  │  Gateway     │  │  Gateway     │  │  Gateway     │      │
@@ -88,8 +88,8 @@ GLM-4.7 / OpenRouter APIキーを共有しつつ、各ボットは独立した�
 | ボット名 | ポート | 説明 |
 |---------|--------|------|
 | CL1-Kuroha | 18789 | Agent 1 - メインエージェント |
-| CL2-Reika | 18791 | Bot 2 - サポートエージェント |
-| CL3-Sentinel | 18793 | Bot 3 - モニターエージェント |
+| CL2-Reika | 18791 | Agent 2 - サポートエージェント |
+| CL3-Sentinel | 18793 | Agent 3 - モニターエージェント |
 
 ---
 
@@ -136,16 +136,16 @@ nano .env  # お好みのエディタで編集
 
 `.env` に以下を設定：
 - `ZAI_API_KEY` または `OPENROUTER_API_KEY`（AIプロバイダーのAPIキー）
-- `DISCORD_AGENT1_TOKEN`, `DISCORD_BOT2_TOKEN`, `DISCORD_BOT3_TOKEN`（Discordボットトークン）
+- `DISCORD_AGENT1_TOKEN`, `DISCORD_AGENT2_TOKEN`, `DISCORD_AGENT3_TOKEN`（Discordボットトークン）
 - ゲートウェイトークン（`openssl rand -hex 32` で生成）
 
 ```bash
 # 3. 設定ファイルをコピー（ZAIを使用する場合）
-for bot in agent1 bot2 bot3; do
-    mkdir -p config/$bot/cron
-    cp config/examples/models.json.example config/$bot/models.json
-    cp config/examples/openclaw.json.example config/$bot/openclaw.json
-    echo '{"jobs":[]}' > config/$bot/cron/jobs.json
+for agent in agent1 agent2 agent3; do
+    mkdir -p config/$agent/cron
+    cp config/examples/models.json.example config/$agent/models.json
+    cp config/examples/openclaw.json.example config/$agent/openclaw.json
+    echo '{"jobs":[]}' > config/$agent/cron/jobs.json
 done
 ```
 
@@ -154,6 +154,47 @@ OpenRouterを使用する場合は、`models.openrouter.json.example` と `openc
 ```bash
 # 4. ボットを起動
 docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
+```
+
+### 🔧 自動セットアップスクリプトを使う
+
+`setup.sh` スクリプトを使うと、1つずつエージェントを簡単にセットアップできます。
+
+```bash
+# 実行権限を付与
+chmod +x setup.sh
+
+# Agent 1 をセットアップ（対話モード）
+./setup.sh
+
+# Agent 2 をセットアップ（対話モード）
+./setup.sh 2
+
+# Agent 3 をセットアップ（非対話モード）
+./setup.sh 3 -y
+```
+
+**スクリプトの機能:**
+- `.env` ファイルの自動作成
+- ゲートウェイトークンの自動生成
+- configディレクトリとワークスペースの初期化
+- OpenClawブートストラップファイルの作成（AGENTS.md, SOUL.md等）
+- GitHubプライベートリポジトリの自動作成とプッシュ（ghコマンド使用時）
+- Discordチャンネルの自動追加
+
+**オプション:**
+| オプション | 説明 |
+|---------|------|
+| `-y, --yes` | 非対話モード（すべてのプロンプトに自動でYes） |
+| `-h, --help` | ヘルプを表示 |
+
+**例:**
+```bash
+# ヘルプを表示
+./setup.sh -h
+
+# Agent 2 を非対話モードでセットアップ
+./setup.sh 2 -y
 ```
 
 ### 📡 リモートマシンでのセットアップ（SSH経由）
@@ -177,11 +218,11 @@ cd OpenClaw-Docker
 scp D:\Prj\jetson-nano-ws\.env maki-jetson:~/Prj/OpenClaw-Docker/.env
 
 # 5. 設定ファイルをコピー（SSH接続したターミナルで）
-for bot in agent1 bot2 bot3; do
-    mkdir -p config/$bot/cron
-    cp config/examples/models.json.example config/$bot/models.json
-    cp config/examples/openclaw.json.example config/$bot/openclaw.json
-    echo '{"jobs":[]}' > config/$bot/cron/jobs.json
+for agent in agent1 agent2 agent3; do
+    mkdir -p config/$agent/cron
+    cp config/examples/models.json.example config/$agent/models.json
+    cp config/examples/openclaw.json.example config/$agent/openclaw.json
+    echo '{"jobs":[]}' > config/$agent/cron/jobs.json
 done
 
 # 6. ボットを起動
@@ -232,8 +273,8 @@ cp .env.example .env
 
 ```bash
 openssl rand -hex 32  # Agent 1 用
-openssl rand -hex 32  # Bot 2 用
-openssl rand -hex 32  # Bot 3 用
+openssl rand -hex 32  # Agent 2 用
+openssl rand -hex 32  # Agent 3 用
 ```
 
 `.env` を編集：
@@ -241,8 +282,8 @@ openssl rand -hex 32  # Bot 3 用
 ```bash
 # ゲートウェイトークン（3つの異なる値）
 OPENCLAW_AGENT1_GATEWAY_TOKEN=生成したトークン1
-OPENCLAW_BOT2_GATEWAY_TOKEN=生成したトークン2
-OPENCLAW_BOT3_GATEWAY_TOKEN=生成したトークン3
+OPENCLAW_AGENT2_GATEWAY_TOKEN=生成したトークン2
+OPENCLAW_AGENT3_GATEWAY_TOKEN=生成したトークン3
 
 # AI APIキー（必要なプロバイダーのみ設定）
 ZAI_API_KEY=あなたのGLM_APIキー
@@ -250,13 +291,13 @@ OPENROUTER_API_KEY=あなたのOPENROUTER_APIキー
 
 # Discord Botトークン（3つの別々のアカウント）
 DISCORD_AGENT1_TOKEN=あなたのDiscordトークン1
-DISCORD_BOT2_TOKEN=あなたのDiscordトークン2
-DISCORD_BOT3_TOKEN=あなたのDiscordトークン3
+DISCORD_AGENT2_TOKEN=あなたのDiscordトークン2
+DISCORD_AGENT3_TOKEN=あなたのDiscordトークン3
 ```
 
 ### 4. ボットを設定
 
-各ボットには `config/bot*/` 以下に設定ファイルが必要です：
+各ボットには `config/agent*/` 以下に設定ファイルが必要です：
 
 #### `models.json`（全ボット共通）
 
@@ -401,9 +442,9 @@ Docker Compose設定は用途に合わせて4つのファイルに分割され�
 | ファイル | 用途 | 説明 |
 |---------|------|------|
 | `docker-compose.yml` | Standard版 - Agent 1 | メインボット（Agent 1）のみのシンプル構成 |
-| `docker-compose.multi.yml` | Standard版 - Bot 2&3 | 追加ボット（Bot 2, 3）の構成 |
+| `docker-compose.multi.yml` | Standard版 - Agent 2&3 | 追加ボット（Agent 2, 3）の構成 |
 | `docker-compose.infinity.yml` | Infinity版 - Agent 1 | 開発用機能付きAgent 1（Playwright、gh CLI等） |
-| `docker-compose.infinity.multi.yml` | Infinity版 - Bot 2&3 | 開発用機能付きBot 2, 3 |
+| `docker-compose.infinity.multi.yml` | Infinity版 - Agent 2&3 | 開発用機能付きAgent 2, 3 |
 
 #### Standard版（本番運用向け）
 
@@ -411,7 +452,7 @@ Docker Compose設定は用途に合わせて4つのファイルに分割され�
 # Agent 1 のみを起動
 docker compose up -d
 
-# 全てのボットを起動（Agent 1 + Bot 2&3）
+# 全てのエージェントを起動（Agent 1 + Agent 2&3）
 docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
 
 # ステータス確認
@@ -432,7 +473,7 @@ Infinity版には以下の追加機能が含まれます：
 # Agent 1 のみを起動
 docker compose -f docker-compose.infinity.yml up -d --build
 
-# 全てのボットを起動（Agent 1 + Bot 2&3）
+# 全てのエージェントを起動（Agent 1 + Agent 2&3）
 docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml up -d --build
 
 # ログ表示
@@ -448,13 +489,13 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 ```
 ./
 ├── docker-compose.yml              # Standard版 - Agent 1
-├── docker-compose.multi.yml        # Standard版 - Bot 2&3
+├── docker-compose.multi.yml        # Standard版 - Agent 2&3
 ├── docker-compose.infinity.yml     # Infinity版 - Agent 1
-├── docker-compose.infinity.multi.yml  # Infinity版 - Bot 2&3
+├── docker-compose.infinity.multi.yml  # Infinity版 - Agent 2&3
 ├── .env
 ├── .env.example
 ├── README.md
-├── setup.sh                        # 自動セットアップスクリプト
+├── setup.sh                        # 1エージェント用セットアップスクリプト
 ├── assets/
 │   └── header.png
 ├── docker/
@@ -472,12 +513,12 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   │   ├── models.json
 │   │   └── cron/
 │   │       └── jobs.json
-│   ├── bot2/
+│   ├── agent2/
 │   │   ├── openclaw.json
 │   │   ├── models.json
 │   │   └── cron/
 │   │       └── jobs.json
-│   ├── bot3/
+│   ├── agent3/
 │   │   ├── openclaw.json
 │   │   ├── models.json
 │   │   └── cron/
@@ -485,8 +526,8 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   └── openclaw.json  # グローバル設定
 └── workspace/
     ├── agent1/
-    ├── bot2/
-    └── bot3/
+    ├── agent2/
+    └── agent3/
 ```
 
 ### config/examples/ について
@@ -501,8 +542,8 @@ cp config/examples/models.json.example config/agent1/models.json
 cp config/examples/openclaw.json.example config/agent1/openclaw.json
 
 # OpenRouter を使用する場合
-cp config/examples/models.openrouter.json.example config/bot2/models.json
-cp config/examples/openclaw.openrouter.json.example config/bot2/openclaw.json
+cp config/examples/models.openrouter.json.example config/agent2/models.json
+cp config/examples/openclaw.openrouter.json.example config/agent2/openclaw.json
 ```
 
 ### ボリュームマウント構成
@@ -511,8 +552,8 @@ cp config/examples/openclaw.openrouter.json.example config/bot2/openclaw.json
 
 | ホストパス | コンテナパス | 説明 |
 |-----------|-------------|------|
-| `./config/bot{N}/` | `/home/node/.openclaw/` | ボットの設定ファイル（モデル、チャンネル等） |
-| `./workspace/bot{N}/` | `/home/node/.openclaw/workspace/` | ワークスペース（スキル、一時ファイル等） |
+| `./config/agent{N}/` | `/home/node/.openclaw/` | ボットの設定ファイル（モデル、チャンネル等） |
+| `./workspace/agent{N}/` | `/home/node/.openclaw/workspace/` | ワークスペース（スキル、一時ファイル等） |
 
 **ワークスペースの永続化**: `./workspace/` ディレクトリはコンテナの再起動後もデータを保持するためにホスト側にマウントされます。スキルやエージェントが生成したファイルはここに保存されます。
 
@@ -675,7 +716,7 @@ sudo kill -9 <PID>
 
 **原因:** `ackReactionScope` の設定
 
-**解決策:** `config/bot*/openclaw.json` を確認：
+**解決策:** `config/agent*/openclaw.json` を確認：
 ```json
 {
   "messages": {

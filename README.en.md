@@ -58,7 +58,7 @@ This project runs **3 independent Discord bots** using **OpenClaw** with Docker 
 ├─────────────────────────────────────────────────────────────┤
 │  ┌──────────────┐  ┌──────────────┐  ┌──────────────┐      │
 │  │  openclaw-   │  │  openclaw-   │  │  openclaw-   │      │
-│  │    agent1      │  │    bot2      │  │    bot3      │      │
+│  │    agent1      │  │    agent2      │  │    agent3      │      │
 │  │  (CL1-Kuroha)│  │  (CL2-Reika) │  │ (CL3-Sentinel)│     │
 │  │              │  │              │  │              │      │
 │  │  Gateway     │  │  Gateway     │  │  Gateway     │      │
@@ -88,8 +88,8 @@ This project runs **3 independent Discord bots** using **OpenClaw** with Docker 
 | Bot Name | Port | Description |
 |----------|------|-------------|
 | CL1-Kuroha | 18789 | Agent 1 - Main Agent |
-| CL2-Reika  | 18791 | Bot 2 - Support Agent |
-| CL3-Sentinel | 18793 | Bot 3 - Monitor Agent |
+| CL2-Reika  | 18791 | Agent 2 - Support Agent |
+| CL3-Sentinel | 18793 | Agent 3 - Monitor Agent |
 
 ---
 
@@ -162,8 +162,8 @@ Generate gateway tokens (3 separate tokens):
 
 ```bash
 openssl rand -hex 32  # Agent 1
-openssl rand -hex 32  # Bot 2
-openssl rand -hex 32  # Bot 3
+openssl rand -hex 32  # Agent 2
+openssl rand -hex 32  # Agent 3
 ```
 
 Edit `.env`:
@@ -171,8 +171,8 @@ Edit `.env`:
 ```bash
 # Gateway tokens (3 unique values)
 OPENCLAW_AGENT1_GATEWAY_TOKEN=your_token_1
-OPENCLAW_BOT2_GATEWAY_TOKEN=your_token_2
-OPENCLAW_BOT3_GATEWAY_TOKEN=your_token_3
+OPENCLAW_AGENT2_GATEWAY_TOKEN=your_token_2
+OPENCLAW_AGENT3_GATEWAY_TOKEN=your_token_3
 
 # AI API Keys (configure only the providers you need)
 ZAI_API_KEY=your_glm_api_key
@@ -180,13 +180,13 @@ OPENROUTER_API_KEY=your_openrouter_api_key
 
 # Discord Bot Tokens (3 separate accounts)
 DISCORD_AGENT1_TOKEN=your_discord_token_1
-DISCORD_BOT2_TOKEN=your_discord_token_2
-DISCORD_BOT3_TOKEN=your_discord_token_3
+DISCORD_AGENT2_TOKEN=your_discord_token_2
+DISCORD_AGENT3_TOKEN=your_discord_token_3
 ```
 
 ### 4. Configure Bots
 
-Each bot requires configuration files in `config/bot*/`:
+Each bot requires configuration files in `config/agent*/`:
 
 #### `models.json` (same for all bots)
 
@@ -322,7 +322,48 @@ Each bot requires configuration files in `config/bot*/`:
 }
 ```
 
-### 5. Start Bots
+### 5. Automated Setup Script
+
+Use the `setup.sh` script to easily set up each agent:
+
+```bash
+# Make script executable
+chmod +x setup.sh
+
+# Setup Agent 1 (interactive mode)
+./setup.sh
+
+# Setup Agent 2 (interactive mode)
+./setup.sh 2
+
+# Setup Agent 3 (non-interactive mode)
+./setup.sh 3 -y
+```
+
+**Script features:**
+- Automatic `.env` file creation
+- Gateway token generation
+- Config directory and workspace initialization
+- OpenClaw bootstrap files creation (AGENTS.md, SOUL.md, etc.)
+- Automatic GitHub private repository creation and push (when gh command is available)
+- Discord channel automatic addition
+
+**Options:**
+| Option | Description |
+|--------|-------------|
+| `-y, --yes` | Non-interactive mode (auto-confirm all prompts) |
+| `-h, --help` | Show help message |
+
+**Examples:**
+```bash
+# Show help
+./setup.sh -h
+
+# Setup Agent 2 in non-interactive mode
+./setup.sh 2 -y
+```
+
+### 6. Start Bots
 
 Docker Compose configurations are split into 4 files for different use cases:
 
@@ -331,9 +372,9 @@ Docker Compose configurations are split into 4 files for different use cases:
 | File | Purpose | Description |
 |------|---------|-------------|
 | `docker-compose.yml` | Standard - Agent 1 | Simple configuration for main bot (Agent 1) only |
-| `docker-compose.multi.yml` | Standard - Bot 2&3 | Additional bots (Bot 2, 3) configuration |
+| `docker-compose.multi.yml` | Standard - Agent 2&3 | Additional bots (Agent 2, 3) configuration |
 | `docker-compose.infinity.yml` | Infinity - Agent 1 | Development-enabled Agent 1 (Playwright, gh CLI, etc.) |
-| `docker-compose.infinity.multi.yml` | Infinity - Bot 2&3 | Development-enabled Bot 2, 3 |
+| `docker-compose.infinity.multi.yml` | Infinity - Agent 2&3 | Development-enabled Agent 2, 3 |
 
 #### Standard Version (Production)
 
@@ -341,7 +382,7 @@ Docker Compose configurations are split into 4 files for different use cases:
 # Start Agent 1 only
 docker compose up -d
 
-# Start all bots (Agent 1 + Bot 2&3)
+# Start all agents (Agent 1 + Agent 2&3)
 docker compose -f docker-compose.yml -f docker-compose.multi.yml up -d
 
 # Check status
@@ -362,7 +403,7 @@ The Infinity version includes additional features:
 # Start Agent 1 only
 docker compose -f docker-compose.infinity.yml up -d --build
 
-# Start all bots (Agent 1 + Bot 2&3)
+# Start all agents (Agent 1 + Agent 2&3)
 docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.yml up -d --build
 
 # View logs
@@ -378,13 +419,13 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 ```
 ./
 ├── docker-compose.yml              # Standard - Agent 1
-├── docker-compose.multi.yml        # Standard - Bot 2&3
+├── docker-compose.multi.yml        # Standard - Agent 2&3
 ├── docker-compose.infinity.yml     # Infinity - Agent 1
-├── docker-compose.infinity.multi.yml  # Infinity - Bot 2&3
+├── docker-compose.infinity.multi.yml  # Infinity - Agent 2&3
 ├── .env
 ├── .env.example
 ├── README.md
-├── setup.sh
+├── setup.sh                        # Single-agent setup script
 ├── assets/
 │   └── header.png
 ├── docker/
@@ -396,12 +437,12 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   │   ├── models.json
 │   │   └── cron/
 │   │       └── jobs.json
-│   ├── bot2/
+│   ├── agent2/
 │   │   ├── openclaw.json
 │   │   ├── models.json
 │   │   └── cron/
 │   │       └── jobs.json
-│   ├── bot3/
+│   ├── agent3/
 │   │   ├── openclaw.json
 │   │   ├── models.json
 │   │   └── cron/
@@ -409,8 +450,8 @@ docker compose -f docker-compose.infinity.yml -f docker-compose.infinity.multi.y
 │   └── openclaw.json  # Global config
 └── workspace/
     ├── agent1/
-    ├── bot2/
-    └── bot3/
+    ├── agent2/
+    └── agent3/
 ```
 
 ### Volume Mount Configuration
@@ -419,8 +460,8 @@ Each bot container uses the following volume mounts:
 
 | Host Path | Container Path | Description |
 |-----------|----------------|-------------|
-| `./config/bot{N}/` | `/home/node/.openclaw/` | Bot configuration files (models, channels, etc.) |
-| `./workspace/bot{N}/` | `/home/node/.openclaw/workspace/` | Workspace (skills, temporary files, etc.) |
+| `./config/agent{N}/` | `/home/node/.openclaw/` | Bot configuration files (models, channels, etc.) |
+| `./workspace/agent{N}/` | `/home/node/.openclaw/workspace/` | Workspace (skills, temporary files, etc.) |
 
 **Workspace Persistence**: The `./workspace/` directory is mounted to the host to persist data across container restarts. Files created by skills and agents are stored here.
 
@@ -585,7 +626,7 @@ sudo kill -9 <PID>
 
 **Cause:** `ackReactionScope` configuration
 
-**Solution:** Check `config/bot*/openclaw.json`:
+**Solution:** Check `config/agent*/openclaw.json`:
 ```json
 {
   "messages": {
