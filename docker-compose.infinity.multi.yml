@@ -21,7 +21,7 @@ services:
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_AGENT2_TOKEN}
-      GITHUB_TOKEN: ${GH_PAT_AGENT1}
+      GITHUB_TOKEN: ${GH_PAT_AGENT2}
     volumes:
       - ./config/agent2:/home/agent/.openclaw
       - ./workspace/agent2:/home/agent/.openclaw/workspace
@@ -48,7 +48,7 @@ services:
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
       DISCORD_BOT_TOKEN: ${DISCORD_AGENT3_TOKEN}
-      GITHUB_TOKEN: ${GH_PAT_AGENT1}
+      GITHUB_TOKEN: ${GH_PAT_AGENT3}
     volumes:
       - ./config/agent3:/home/agent/.openclaw
       - ./workspace/agent3:/home/agent/.openclaw/workspace
