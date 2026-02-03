@@ -1,30 +1,30 @@
 # =============================================================================
-# OpenClaw Infinity - Multi Bot Configuration (Bot 2 & 3)
+# OpenClaw Infinity - Multi Agent Configuration (Agent 2 & 3)
 # =============================================================================
 # Usage:
 #   docker compose -f docker-compose.infinity.multi.yml up -d
 # =============================================================================
 
 services:
-  # Bot 2 - Gateway (Infinity)
-  openclaw-infinity-bot2:
+  # Agent 2 - Gateway (Infinity)
+  openclaw-infinity-agent2:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: openclaw-infinity-bot2
+    container_name: openclaw-infinity-agent2
     environment:
       HOME: /home/agent
       TERM: xterm-256color
       PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT2_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_AGENT2_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT2_TOKEN}
+      DISCORD_BOT_TOKEN: ${DISCORD_AGENT2_TOKEN}
       GITHUB_TOKEN: ${GH_PAT_AGENT1}
     volumes:
-      - ./config/bot2:/home/agent/.openclaw
-      - ./workspace/bot2:/home/agent/.openclaw/workspace
+      - ./config/agent2:/home/agent/.openclaw
+      - ./workspace/agent2:/home/agent/.openclaw/workspace
     ports:
       - "18791:18789"
     init: true
@@ -33,25 +33,25 @@ services:
     networks:
       - infinity-network
 
-  # Bot 3 - Gateway (Infinity)
-  openclaw-infinity-bot3:
+  # Agent 3 - Gateway (Infinity)
+  openclaw-infinity-agent3:
     image: ghcr.io/sunwood-ai-oss-hub/agentos-openclaw-infinity:latest
     build:
       context: .
       dockerfile: ./docker/Dockerfile.infinity
-    container_name: openclaw-infinity-bot3
+    container_name: openclaw-infinity-agent3
     environment:
       HOME: /home/agent
       TERM: xterm-256color
       PLAYWRIGHT_BROWSERS_PATH: /opt/playwright
-      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_BOT3_GATEWAY_TOKEN}
+      OPENCLAW_GATEWAY_TOKEN: ${OPENCLAW_AGENT3_GATEWAY_TOKEN}
       ZAI_API_KEY: ${ZAI_API_KEY}
       OPENROUTER_API_KEY: ${OPENROUTER_API_KEY}
-      DISCORD_BOT_TOKEN: ${DISCORD_BOT3_TOKEN}
+      DISCORD_BOT_TOKEN: ${DISCORD_AGENT3_TOKEN}
       GITHUB_TOKEN: ${GH_PAT_AGENT1}
     volumes:
-      - ./config/bot3:/home/agent/.openclaw
-      - ./workspace/bot3:/home/agent/.openclaw/workspace
+      - ./config/agent3:/home/agent/.openclaw
+      - ./workspace/agent3:/home/agent/.openclaw/workspace
     ports:
       - "18793:18789"
     init: true
