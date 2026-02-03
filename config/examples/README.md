@@ -30,9 +30,9 @@
 cp config/examples/models.json.example config/agent1/models.json
 cp config/examples/openclaw.json.example config/agent1/openclaw.json
 
-# Bot 2 の場合（OpenRouterを使用）
-cp config/examples/models.openrouter.json.example config/bot2/models.json
-cp config/examples/openclaw.openrouter.json.example config/bot2/openclaw.json
+# Agent 2 の場合（OpenRouterを使用）
+cp config/examples/models.openrouter.json.example config/agent2/models.json
+cp config/examples/openclaw.openrouter.json.example config/agent2/openclaw.json
 ```
 
 ### 2. 環境変数の設定
