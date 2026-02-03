@@ -1,4 +1,4 @@
-<img src="https://raw.githubusercontent.com/Sunwood-AI-OSS-Hub/cbot/main/assets/release-header-v0.3.0.svg" alt="v0.3.0 Release"/>
+<img src="https://raw.githubusercontent.com/Sunwood-AI-OSS-Hub/cbot/main/assets/release-header-v0.3.0.png" alt="v0.3.0 Release"/>
 
 # v0.3.0 - Agent Integration & Browser API / エージェント統合とブラウザAPI
 
